@@ -14,7 +14,9 @@
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\(''''scripts'''', {}\\)\\)\")",
       "WebFetch(domain:cdn.axcelerate.com.au)",
       "mcp__plugin_figma_figma__get_screenshot",
-      "Bash(node -e \":*)"
+      "Bash(node -e \":*)",
+      "Bash(ls -la /c/Users/Sam/source2/axcelerate-arc-prototyping-library/*.md)",
+      "mcp__claude_ai_aXcelerate_Support_Docs__searchSupportArticles"
     ]
   }
 }

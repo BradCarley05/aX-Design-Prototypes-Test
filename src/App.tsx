@@ -40,7 +40,6 @@ import { Tooltip, TooltipProvider, TooltipRoot, TooltipTrigger, TooltipContent }
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { format } from 'date-fns'
-import { CalendarIcon } from 'lucide-react'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -88,7 +87,7 @@ const NAV_ITEMS = [
   ['single-select',  'Single Select',  'icon-radio-button-checked'],
   ['autocomplete',   'Autocomplete',   'icon-contact-user-search-people'],
   ['tooltip',        'Tooltip',        'icon-info-outline'],
-  ['date-picker',    'Date Picker',    'icon-calendar'],
+  ['date-picker',    'Date Picker',    'icon-calendar-outline'],
   ['demo-cards',     'Demo Cards',     'icon-portrait-card-view'],
 ] as const
 
@@ -933,7 +932,7 @@ export default function App() {
                   <Popover>
                     <PopoverTrigger asChild>
                       <button className="ax-select-trigger" style={{ width: 240 }}>
-                        <CalendarIcon style={{ width: 16, height: 16, color: 'var(--text-light)', flexShrink: 0 }} />
+                        <i className="icon-calendar-outline" style={{ fontSize: 16, color: 'var(--text-light)', flexShrink: 0 }} />
                         <span className="ax-select-value" style={!pickerDate ? { color: 'var(--text-placeholder)' } : {}}>
                           {pickerDate ? format(pickerDate, 'PPP') : 'Pick a date'}
                         </span>
@@ -953,7 +952,7 @@ export default function App() {
                 <Popover>
                   <PopoverTrigger asChild>
                     <button className="ax-select-trigger" style={{ width: 300 }}>
-                      <CalendarIcon style={{ width: 16, height: 16, color: 'var(--text-light)', flexShrink: 0 }} />
+                      <i className="icon-calendar-outline" style={{ fontSize: 16, color: 'var(--text-light)', flexShrink: 0 }} />
                       <span className="ax-select-value" style={!pickerDateRange.from ? { color: 'var(--text-placeholder)' } : {}}>
                         {pickerDateRange.from
                           ? pickerDateRange.to
@@ -979,7 +978,7 @@ export default function App() {
                 <Popover>
                   <PopoverTrigger asChild>
                     <button className="ax-select-trigger" style={{ width: 240 }}>
-                      <CalendarIcon style={{ width: 16, height: 16, color: 'var(--text-light)', flexShrink: 0 }} />
+                      <i className="icon-calendar-outline" style={{ fontSize: 16, color: 'var(--text-light)', flexShrink: 0 }} />
                       <span className="ax-select-value" style={!pickerMultiple?.length ? { color: 'var(--text-placeholder)' } : {}}>
                         {pickerMultiple && pickerMultiple.length > 0
                           ? `${pickerMultiple.length} date${pickerMultiple.length > 1 ? 's' : ''} selected`
