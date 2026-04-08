@@ -12,6 +12,8 @@ Never use lucide-react icons. Always use icon font classes via `<i className="ic
 
 **How to apply:** Any time an icon is needed, use `<i className="icon-name-here" />`. Do not import from lucide-react. Check the blacklist before using any icon. Whitelisted icons are always allowed even if they fall in a blacklisted range.
 
+Only use icon names that are confirmed to exist in the font — do not guess icon names. Refer to icons already used in the codebase (e.g. `icon-edit-outline`, `icon-calendar-outline`, `icon-unit-add`, `icon-arrow-right-short`) or ask the user to confirm the name. Using an invalid icon name renders nothing silently.
+
 ### Blacklist
 
 The following Unicode code point ranges are blacklisted and must not be used:

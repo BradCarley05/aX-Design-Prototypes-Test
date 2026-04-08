@@ -29,9 +29,9 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         today:           "ax-calendar-day--today",
         outside:         "ax-calendar-day--outside",
         disabled:        "ax-calendar-day--disabled",
-        range_start:     "ax-calendar-day--selected",
-        range_end:       "ax-calendar-day--selected",
-        range_middle:    "ax-calendar-day--range-middle",
+        range_start:     "ax-calendar-cell--range-start",
+        range_end:       "ax-calendar-cell--range-end",
+        range_middle:    "ax-calendar-cell--range-middle",
         hidden:          "invisible",
         ...classNames,
       }}

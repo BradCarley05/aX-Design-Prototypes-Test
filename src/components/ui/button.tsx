@@ -1,8 +1,9 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
-import { ChevronDown, Loader2 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { Spinner } from "@/components/ui/spinner"
+import { Tooltip } from "@/components/ui/tooltip"
 
 type ButtonVariant =
   | "default" | "destructive" | "positive" | "secondary"
@@ -55,7 +56,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             disabled={isDisabled}
             {...props}
           >
-            {loading ? <Loader2 className="ax-spin" /> : leftIcon}
+            {loading ? <Spinner /> : leftIcon}
             {children}
           </Comp>
           <div
@@ -71,7 +72,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             disabled={isDisabled}
             className={cn("ax-btn", `ax-btn--${variant}`, `ax-btn-size--${size}`)}
           >
-            <ChevronDown />
+            <i className="icon-chevron-down" />
           </button>
         </div>
       )
@@ -79,7 +80,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <Comp className={baseClass} ref={ref} disabled={isDisabled} {...props}>
-        {loading ? <Loader2 className="ax-spin" /> : leftIcon}
+        {loading ? <Spinner /> : leftIcon}
         {children}
         {rightIcon}
       </Comp>
@@ -88,4 +89,50 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = "Button"
 
-export { Button }
+export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  icon: string
+  buttonStyle?: boolean
+  rounded?: boolean
+  size?: 18 | 20 | 24
+  selected?: boolean
+  tooltip?: string
+}
+
+function IconButton({
+  icon,
+  buttonStyle = true,
+  rounded = false,
+  size = 20,
+  selected = false,
+  tooltip,
+  className,
+  disabled,
+  ...props
+}: IconButtonProps) {
+  const btn = (
+    <button
+      type="button"
+      className={cn(
+        "ax-icon-btn",
+        buttonStyle ? "ax-icon-btn--styled" : "ax-icon-btn--base",
+        rounded && "ax-icon-btn--rounded",
+        selected && "ax-icon-btn--selected",
+        `ax-icon-btn--size-${size}`,
+        className
+      )}
+      disabled={disabled}
+      {...props}
+    >
+      <i className={icon} />
+    </button>
+  )
+
+  if (tooltip) {
+    return <Tooltip content={tooltip}>{btn}</Tooltip>
+  }
+
+  return btn
+}
+IconButton.displayName = "IconButton"
+
+export { Button, IconButton }

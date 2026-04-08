@@ -122,6 +122,83 @@
 .ax-btn-split-divider--light { background-color: white; }
 .ax-btn-split-divider--dark  { background-color: var(--border-dark); }
 
+/* ─── Icon Button ─────────────────────────────────────────────────────────── */
+
+.ax-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--radius-button);
+  flex-shrink: 0;
+  transition: var(--transition-standard);
+  outline: none;
+}
+
+.ax-icon-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-shadow-border);
+}
+
+.ax-icon-btn:active { transform: scale(0.95); }
+
+.ax-icon-btn i[class^="icon-"],
+.ax-icon-btn i[class*=" icon-"] {
+  line-height: 1;
+  font-style: normal;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* Sizes — padding scales with icon size */
+.ax-icon-btn--size-24 { padding: var(--space-100); }
+.ax-icon-btn--size-20 { padding: var(--space-075); }
+.ax-icon-btn--size-18 { padding: 5px; }
+
+.ax-icon-btn--size-24 i[class^="icon-"],
+.ax-icon-btn--size-24 i[class*=" icon-"] { font-size: var(--font-size-xxlarge); height: var(--font-size-xxlarge); }
+
+.ax-icon-btn--size-20 i[class^="icon-"],
+.ax-icon-btn--size-20 i[class*=" icon-"] { font-size: var(--font-size-xxlarge); height: var(--font-size-xxlarge); }
+
+.ax-icon-btn--size-18 i[class^="icon-"],
+.ax-icon-btn--size-18 i[class*=" icon-"] { font-size: var(--font-size-xlarge);  height: var(--font-size-xlarge); }
+
+.ax-icon-btn--rounded { border-radius: var(--radius-round); }
+
+/* Button style — element background, button shadow, primary icon colour */
+.ax-icon-btn--styled {
+  background-color: var(--bg-element);
+  box-shadow: var(--shadow-button);
+  color: var(--text-primary);
+}
+
+.ax-icon-btn--styled:hover          { background-color: var(--bg-secondary-hover); }
+.ax-icon-btn--styled:active         { background-color: var(--bg-secondary-active); transform: scale(0.95); }
+.ax-icon-btn--styled:disabled       { background-color: var(--bg-dark); box-shadow: none; color: var(--text-disabled); pointer-events: none; cursor: not-allowed; }
+
+/* Base — icon only, no padding, 5px radius, placeholder colour at rest, text colour on hover */
+.ax-icon-btn--base {
+  color: var(--text-placeholder);
+  border-radius: var(--radius-button-sm);
+  transition: box-shadow 0.15s ease-in-out, transform 0.1s ease-in-out;
+  padding: 0;
+}
+
+.ax-icon-btn--base:hover            { box-shadow: var(--bg-secondary-hover) 0px 0px 0px 4px, var(--bg-secondary-hover) 0px 0px 0px 100px inset; color: var(--text); }
+.ax-icon-btn--base:active           { box-shadow: var(--bg-secondary-active) 0px 0px 0px 4px, var(--bg-secondary-active) 0px 0px 0px 100px inset; color: var(--text); transform: scale(0.95); }
+.ax-icon-btn--base:disabled         { background-color: var(--bg-dark); color: var(--text-disabled); pointer-events: none; cursor: not-allowed; }
+
+/* Selected — styled: keeps button shadow */
+.ax-icon-btn--styled.ax-icon-btn--selected,
+.ax-icon-btn--styled.ax-icon-btn--selected:hover { background-color: var(--primary-200); color: var(--primary-700); }
+
+/* Selected — base: background + icon colour only, no border */
+.ax-icon-btn--base.ax-icon-btn--selected,
+.ax-icon-btn--base.ax-icon-btn--selected:hover   { background-color: var(--primary-200); color: var(--primary-700); box-shadow: none; }
+
 /* ─── Input ──────────────────────────────────────────────────────────────── */
 
 .ax-input {
@@ -363,7 +440,8 @@
 
 .ax-checkbox-indicator i {
   font-size: 15px;
-  line-height: 1;
+  line-height: 15px;
+  margin-top: var(--space-025);
 }
 
 /* ─── Option / OptionStack ───────────────────────────────────────────────── */
@@ -537,6 +615,15 @@
 }
 
 .ax-select-trigger[data-placeholder] .ax-select-value { color: var(--text-placeholder); }
+
+.ax-select-trigger i[class^="icon-"],
+.ax-select-trigger i[class*=" icon-"] {
+  font-size: var(--font-size-large);
+  color: var(--text-light);
+  flex-shrink: 0;
+  line-height: 1;
+  font-style: normal;
+}
 
 .ax-select-trigger:focus-visible { outline: none; }
 
@@ -1409,10 +1496,20 @@
   position: relative;
 }
 
-/* Range fill between selected days */
-.ax-calendar-cell--in-range { background-color: var(--primary-200); }
-.ax-calendar-cell--range-start { border-radius: var(--radius-element) 0 0 var(--radius-element); background-color: var(--primary-200); }
-.ax-calendar-cell--range-end   { border-radius: 0 var(--radius-element) var(--radius-element) 0; background-color: var(--primary-200); }
+/* Range strip — on the cell (td) */
+.ax-calendar-cell.ax-calendar-cell--range-middle { background-color: var(--primary-200); }
+.ax-calendar-cell.ax-calendar-cell--range-start  { background: linear-gradient(90deg, transparent 50%, var(--primary-200) 50%); }
+.ax-calendar-cell.ax-calendar-cell--range-end    { background: linear-gradient(90deg, var(--primary-200) 50%, transparent 50%); }
+
+/* Row edge cells — round off the strip on first/last of each week row */
+.ax-calendar-row td:first-child.ax-calendar-cell--range-middle,
+.ax-calendar-row td:first-child.ax-calendar-cell--range-end {
+  border-radius: 100% 0 0 100%;
+}
+.ax-calendar-row td:last-child.ax-calendar-cell--range-middle,
+.ax-calendar-row td:last-child.ax-calendar-cell--range-start {
+  border-radius: 0 100% 100% 0;
+}
 
 /* Day button */
 .ax-calendar-day {
@@ -1421,7 +1518,7 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  border-radius: var(--radius-element);
+  border-radius: var(--radius-round);
   font-size: var(--font-size-base);
   font-family: var(--font-family);
   color: var(--text);
@@ -1429,57 +1526,58 @@
   background: none;
   border: none;
   outline: none;
+  position: relative;
   transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
 }
 
 .ax-calendar-day:hover { background-color: var(--bg-secondary-hover); }
-
 .ax-calendar-day:focus-visible { box-shadow: var(--focus-shadow-border); }
 
+/* Selected (single date, or range start/end circle) */
 .ax-calendar-day--selected {
   background-color: var(--bg-button);
   color: var(--text-button);
 }
+.ax-calendar-day--selected:hover { background-color: var(--bg-button-hover); color: var(--text-button); }
 
-.ax-calendar-day--selected:hover {
-  background-color: var(--bg-button-hover);
-  color: var(--text-button);
-}
-
-.ax-calendar-day--today {
-  background-color: var(--bg-secondary-active);
-  font-weight: var(--font-weight-semi-bold);
-}
-
-.ax-calendar-day--today.ax-calendar-day--selected {
+/* Range start/end button — full circle */
+.ax-calendar-cell--range-start .ax-calendar-day,
+.ax-calendar-cell--range-end .ax-calendar-day {
   background-color: var(--bg-button);
   color: var(--text-button);
+  border-radius: 100%;
 }
+.ax-calendar-cell--range-start .ax-calendar-day:hover,
+.ax-calendar-cell--range-end .ax-calendar-day:hover { background-color: var(--bg-button-hover); }
 
-.ax-calendar-day--outside {
-  color: var(--text-disabled);
-}
-
-.ax-calendar-day--outside.ax-calendar-day--selected {
-  color: var(--text-disabled);
-  background-color: var(--primary-200);
-}
-
-.ax-calendar-day--disabled {
-  color: var(--text-disabled);
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.ax-calendar-day--range-middle {
+/* Range middle button — transparent over the cell strip */
+.ax-calendar-cell--range-middle .ax-calendar-day {
+  background: transparent;
   border-radius: 0;
-  background-color: var(--primary-200);
   color: var(--on-primary-200);
+  width: 100%;
 }
+.ax-calendar-cell--range-middle .ax-calendar-day:hover { background-color: var(--primary-300); }
 
-.ax-calendar-day--range-middle:hover {
-  background-color: var(--primary-300);
+/* Today — dot indicator */
+.ax-calendar-day--today { font-weight: var(--font-weight-medium); }
+.ax-calendar-day--today::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--primary-700);
 }
+.ax-calendar-day--today.ax-calendar-day--selected::after { background-color: var(--text-button); }
+
+.ax-calendar-day--outside { color: var(--text-disabled); }
+.ax-calendar-day--outside.ax-calendar-day--selected { color: var(--text-disabled); background-color: var(--primary-200); }
+
+.ax-calendar-day--disabled { color: var(--text-disabled); cursor: not-allowed; pointer-events: none; }
 
 /* ─── App layout utilities ───────────────────────────────────────────────── */
 
@@ -1499,3 +1597,10 @@
 @media (min-width: 768px) {
   .ax-card-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ─── Demo helpers ────────────────────────────────────────────────────────── */
+
+.ax-demo-picker-row   { display: flex; align-items: center; gap: var(--space-100); }
+.ax-demo-picker-single { width: 240px; }
+.ax-demo-picker-range  { width: 300px; }
+

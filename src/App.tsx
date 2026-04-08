@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { Button, IconButton } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -37,9 +37,8 @@ import { Spinner } from '@/components/ui/spinner'
 import { Box } from '@/components/ui/box'
 import { Option, OptionStack } from '@/components/ui/option'
 import { Tooltip, TooltipProvider, TooltipRoot, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
-import { Calendar } from '@/components/ui/calendar'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { format } from 'date-fns'
+import { DatePicker } from '@/components/ui/date-picker'
+import type { DateRange } from '@/components/ui/date-picker'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -123,8 +122,7 @@ export default function App() {
   const [opt3, setOpt3] = useState(false)
   const [activeNav, setActiveNav] = useState<string>('buttons')
   const [pickerDate, setPickerDate] = useState<Date | undefined>()
-  const [pickerDateRange, setPickerDateRange] = useState<{ from: Date | undefined; to?: Date | undefined }>({ from: undefined })
-  const [pickerMultiple, setPickerMultiple] = useState<Date[] | undefined>()
+  const [pickerDateRange, setPickerDateRange] = useState<DateRange | undefined>()
 
   const countrySearch = useAsyncAutocomplete(async (q) => {
     const res = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(q)}?fields=name,cca2`)
@@ -232,6 +230,27 @@ export default function App() {
                 <Button variant="outline" disabled>Outline</Button>
                 <Button variant="destructive" disabled>Destructive</Button>
                 <Button variant="tertiary" disabled>Tertiary</Button>
+              </Row>
+              <Row label="Icon button — styled">
+                <IconButton icon="icon-edit-outline" size={24} tooltip="Edit" />
+                <IconButton icon="icon-edit-outline" size={20} tooltip="Edit" />
+                <IconButton icon="icon-edit-outline" size={18} tooltip="Edit" />
+                <IconButton icon="icon-edit-outline" size={24} selected tooltip="Selected" />
+                <IconButton icon="icon-edit-outline" size={24} disabled tooltip="Disabled" />
+              </Row>
+              <Row label="Icon button — rounded">
+                <IconButton icon="icon-edit-outline" size={24} rounded tooltip="Edit" />
+                <IconButton icon="icon-edit-outline" size={20} rounded tooltip="Edit" />
+                <IconButton icon="icon-edit-outline" size={18} rounded tooltip="Edit" />
+                <IconButton icon="icon-edit-outline" size={24} rounded selected tooltip="Selected" />
+                <IconButton icon="icon-edit-outline" size={24} rounded disabled tooltip="Disabled" />
+              </Row>
+              <Row label="Icon button — ghost">
+                <IconButton icon="icon-edit-outline" size={24} buttonStyle={false} tooltip="Edit" />
+                <IconButton icon="icon-edit-outline" size={20} buttonStyle={false} tooltip="Edit" />
+                <IconButton icon="icon-edit-outline" size={18} buttonStyle={false} tooltip="Edit" />
+                <IconButton icon="icon-edit-outline" size={24} buttonStyle={false} selected tooltip="Selected" />
+                <IconButton icon="icon-edit-outline" size={24} buttonStyle={false} disabled tooltip="Disabled" />
               </Row>
             </Section>
           )}
@@ -928,72 +947,24 @@ export default function App() {
           {activeNav === 'date-picker' && (
             <Section title="Date Picker">
               <Row label="Single date">
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button className="ax-select-trigger" style={{ width: 240 }}>
-                        <i className="icon-calendar-outline" style={{ fontSize: 16, color: 'var(--text-light)', flexShrink: 0 }} />
-                        <span className="ax-select-value" style={!pickerDate ? { color: 'var(--text-placeholder)' } : {}}>
-                          {pickerDate ? format(pickerDate, 'PPP') : 'Pick a date'}
-                        </span>
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <Calendar mode="single" selected={pickerDate} onSelect={setPickerDate} initialFocus />
-                    </PopoverContent>
-                  </Popover>
+                <div className="ax-demo-picker-row">
+                  <DatePicker
+                    selected={pickerDate}
+                    onSelect={setPickerDate}
+                    className="ax-demo-picker-single"
+                  />
                   {pickerDate && (
                     <Button variant="tertiary" onClick={() => setPickerDate(undefined)}>Clear</Button>
                   )}
                 </div>
               </Row>
-
               <Row label="Date range">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button className="ax-select-trigger" style={{ width: 300 }}>
-                      <i className="icon-calendar-outline" style={{ fontSize: 16, color: 'var(--text-light)', flexShrink: 0 }} />
-                      <span className="ax-select-value" style={!pickerDateRange.from ? { color: 'var(--text-placeholder)' } : {}}>
-                        {pickerDateRange.from
-                          ? pickerDateRange.to
-                            ? `${format(pickerDateRange.from, 'LLL dd, y')} – ${format(pickerDateRange.to, 'LLL dd, y')}`
-                            : format(pickerDateRange.from, 'LLL dd, y')
-                          : 'Pick a date range'}
-                      </span>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <Calendar
-                      mode="range"
-                      selected={pickerDateRange}
-                      onSelect={(range) => setPickerDateRange(range ?? { from: undefined })}
-                      numberOfMonths={2}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </Row>
-
-              <Row label="Multiple dates">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button className="ax-select-trigger" style={{ width: 240 }}>
-                      <i className="icon-calendar-outline" style={{ fontSize: 16, color: 'var(--text-light)', flexShrink: 0 }} />
-                      <span className="ax-select-value" style={!pickerMultiple?.length ? { color: 'var(--text-placeholder)' } : {}}>
-                        {pickerMultiple && pickerMultiple.length > 0
-                          ? `${pickerMultiple.length} date${pickerMultiple.length > 1 ? 's' : ''} selected`
-                          : 'Pick dates'}
-                      </span>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <Calendar mode="multiple" selected={pickerMultiple} onSelect={setPickerMultiple} initialFocus />
-                  </PopoverContent>
-                </Popover>
-              </Row>
-
-              <Row label="Inline calendar">
-                <Calendar mode="single" selected={pickerDate} onSelect={setPickerDate} />
+                <DatePicker
+                  mode="range"
+                  selected={pickerDateRange}
+                  onSelect={setPickerDateRange}
+                  className="ax-demo-picker-range"
+                />
               </Row>
             </Section>
           )}
