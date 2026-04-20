@@ -1817,3 +1817,431 @@
   font-family: var(--font-family);
 }
 
+/* ─── Mobile Checklist Flow (screens 2-6) ────────────────────────────────── */
+
+/* Suppress dot pattern on plain headers (screens 2-6) */
+.ax-mobile-header--plain::before,
+.ax-mobile-header--plain::after { display: none; }
+
+/* Clickable list item (screen 1 overview row) */
+.ax-mobile-list-item--btn {
+  cursor: pointer;
+  border: none;
+  text-align: left;
+  width: 100%;
+  transition: background-color 0.1s ease-in-out;
+}
+.ax-mobile-list-item--btn:hover { background-color: var(--bg-secondary-hover); }
+
+.ax-mobile-list-arrow {
+  font-size: 20px;
+  color: var(--text-light);
+  flex-shrink: 0;
+}
+
+/* Body container for screens 2-6 (no padding, edge-to-edge) */
+.ax-mobile-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border-medium);
+  border-top: none;
+}
+
+/* Scrollable checklist list */
+.ax-mobile-cl-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Section header within the checklist */
+.ax-mobile-cl-section-header {
+  height: 48px;
+  padding: 0 var(--space-200);
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--border-medium);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-light);
+  font-family: var(--font-family);
+}
+
+/* Single checklist item row */
+.ax-mobile-cl-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-150);
+  padding: var(--space-075) var(--space-200);
+  border-top: 1px solid var(--border-medium);
+}
+
+/* Navigable text button inside a checklist item (screen 3) */
+.ax-mobile-cl-item-btn {
+  flex: 1;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  min-width: 0;
+  font-family: inherit;
+}
+.ax-mobile-cl-item-btn:hover .ax-mobile-cl-item-text { color: var(--text-primary); }
+
+/* Item text label */
+.ax-mobile-cl-item-text {
+  font-size: var(--font-size-small);
+  color: var(--text);
+  line-height: var(--line-height-medium);
+  font-family: var(--font-family);
+}
+
+/* Icon buttons pair */
+.ax-mobile-cl-item-btns {
+  display: flex;
+  gap: var(--space-150);
+  flex-shrink: 0;
+}
+
+/* Icon button */
+.ax-mobile-cl-icon-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  background: var(--bg-element);
+  border-radius: var(--radius-input-sm);
+  box-shadow: var(--shadow-button);
+  cursor: pointer;
+  color: var(--text-light);
+  font-size: 20px;
+  flex-shrink: 0;
+  transition: background-color 0.1s ease-in-out;
+}
+.ax-mobile-cl-icon-btn:hover { background-color: var(--bg-secondary-hover); }
+
+/* Achieved variant of tick icon button */
+.ax-mobile-cl-icon-btn--achieved {
+  border-color: var(--positive-700);
+  background: var(--positive-100);
+  color: var(--text-positive);
+}
+.ax-mobile-cl-icon-btn--achieved:hover { background: var(--positive-200); }
+
+/* Footer bar with "Mark all" button */
+.ax-mobile-cl-footer {
+  border-top: 1px solid var(--border-medium);
+  padding: var(--space-200);
+  flex-shrink: 0;
+}
+
+.ax-mobile-cl-mark-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-100);
+  width: 100%;
+  padding: var(--space-175) var(--space-200);
+  border: none;
+  border-radius: var(--radius-input-sm);
+  background: var(--bg-element);
+  box-shadow: var(--shadow-button);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: background-color 0.1s ease-in-out;
+}
+.ax-mobile-cl-mark-btn:hover { background-color: var(--bg-secondary-hover); }
+
+/* Item number strip (horizontal scrollable row) */
+.ax-mobile-item-strip {
+  display: flex;
+  overflow-x: auto;
+  height: 48px;
+  flex-shrink: 0;
+  background: var(--bg-element);
+  box-shadow: var(--shadow-el2);
+  scrollbar-width: none;
+}
+.ax-mobile-item-strip::-webkit-scrollbar { display: none; }
+
+/* Strip cell */
+.ax-mobile-strip-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-100) var(--space-150);
+  min-width: 44px;
+  gap: var(--space-050);
+  flex-shrink: 0;
+  cursor: pointer;
+  border-right: 1px solid var(--border-medium);
+}
+.ax-mobile-strip-cell:last-child { border-right: none; }
+
+.ax-mobile-strip-cell--current { background: var(--primary-100); }
+
+.ax-mobile-strip-num {
+  font-size: var(--font-size-xsmall);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-light);
+  opacity: 0.6;
+  line-height: var(--line-height-xsmall);
+  font-family: var(--font-family);
+}
+.ax-mobile-strip-num--achieved {
+  color: var(--text-positive);
+  opacity: 1;
+}
+
+.ax-mobile-strip-tick {
+  font-size: 10px;
+  color: var(--text-positive);
+  opacity: 0.8;
+  line-height: 1;
+}
+
+/* Current item row below the strip */
+.ax-mobile-item-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-150);
+  padding: var(--space-150);
+  min-height: 60px;
+  border-bottom: 1px solid var(--border-medium);
+  flex-shrink: 0;
+}
+
+.ax-mobile-item-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-round);
+  background: var(--primary-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--font-size-xsmall);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  line-height: 1;
+}
+
+.ax-mobile-item-label {
+  flex: 1;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text);
+  line-height: var(--line-height-medium);
+  font-family: var(--font-family);
+}
+
+/* Scrollable content area within item detail */
+.ax-mobile-item-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Empty state (no notes yet) */
+.ax-mobile-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-200);
+  padding: var(--space-300) var(--space-400);
+}
+
+.ax-mobile-empty-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-round);
+  background: var(--primary-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ax-mobile-empty-icon i {
+  font-size: 24px;
+  color: var(--text-primary);
+}
+
+.ax-mobile-empty-title {
+  font-size: var(--font-size-large);
+  font-weight: var(--font-weight-medium);
+  color: var(--text);
+  font-family: var(--font-family);
+  margin: 0;
+  line-height: var(--line-height-large);
+}
+
+.ax-mobile-empty-desc {
+  font-size: var(--font-size-base);
+  color: var(--text-light);
+  font-family: var(--font-family);
+  margin: 0;
+  line-height: var(--line-height-medium);
+}
+
+/* Notes section */
+.ax-mobile-notes-wrap {
+  padding: var(--space-200);
+}
+
+.ax-mobile-notes-label {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-light);
+  font-family: var(--font-family);
+  margin: 0 0 var(--space-150) 0;
+}
+
+.ax-mobile-note {
+  display: flex;
+  gap: var(--space-150);
+}
+
+.ax-mobile-note-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-round);
+  background: var(--primary-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  font-size: 18px;
+  color: var(--text-primary);
+  margin-top: var(--space-100);
+}
+
+.ax-mobile-note-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-200);
+  min-width: 0;
+}
+
+.ax-mobile-note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-100);
+}
+
+.ax-mobile-note-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ax-mobile-note-name {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text);
+  font-family: var(--font-family);
+}
+
+.ax-mobile-note-time {
+  font-size: var(--font-size-base);
+  color: var(--text-light);
+  font-family: var(--font-family);
+}
+
+.ax-mobile-note-body {
+  font-size: var(--font-size-base);
+  color: var(--text);
+  line-height: 21px;
+  font-family: var(--font-family);
+  margin: 0;
+}
+
+.ax-mobile-note-photos {
+  display: flex;
+  gap: var(--space-150);
+}
+
+.ax-mobile-note-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-element);
+  background: var(--neutral-200);
+  flex-shrink: 0;
+}
+
+/* Bottom action bar (attachment icons + assess buttons) */
+.ax-mobile-action-bar {
+  border-top: 1px solid var(--border-medium);
+  padding: var(--space-150) var(--space-200) var(--space-200);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-150);
+  flex-shrink: 0;
+}
+
+.ax-mobile-action-icons {
+  display: flex;
+  gap: var(--space-100);
+}
+
+.ax-mobile-action-icon-btn {
+  padding: var(--space-150);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: var(--radius-button-sm);
+  color: var(--text-light);
+  font-size: 20px;
+  transition: background-color 0.1s ease-in-out;
+}
+.ax-mobile-action-icon-btn:hover { background-color: var(--bg-secondary-hover); }
+
+.ax-mobile-assess-btns { display: flex; gap: var(--space-150); }
+
+.ax-mobile-assess-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-075);
+  padding: var(--space-175) var(--space-150);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-input-sm);
+  background: var(--bg-element);
+  box-shadow: var(--shadow-button);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family);
+  color: var(--text-light);
+  cursor: pointer;
+  transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out;
+}
+
+/* NYA button — active/toggled state */
+.ax-mobile-assess-btn--nya {
+  border-color: var(--primary-600);
+  background: var(--bg-secondary-hover);
+  color: var(--text-primary);
+}
+
+/* Achieved button — active/toggled state */
+.ax-mobile-assess-btn--achieved {
+  border-color: var(--positive-600);
+  background: var(--positive-100);
+  color: var(--text-positive);
+}
+

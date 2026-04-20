@@ -40,6 +40,7 @@ import { Tooltip, TooltipProvider, TooltipRoot, TooltipTrigger, TooltipContent }
 import { DatePicker } from '@/components/ui/date-picker'
 import type { DateRange } from '@/components/ui/date-picker'
 import MobileChecklist from '@/MobileChecklist'
+import MobileChecklistFlow from '@/MobileChecklistFlow'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -90,6 +91,7 @@ const NAV_ITEMS = [
   ['date-picker',    'Date Picker',    'icon-calendar-outline'],
   ['demo-cards',     'Demo Cards',     'icon-portrait-card-view'],
   ['mobile-checklist', 'Mobile Checklist', 'icon-activities-tasks-list'],
+  ['mobile-checklist-flow', 'WBL Checklist Flow', 'icon-activities-tasks-list'],
 ] as const
 
 function useAsyncAutocomplete(fetcher: (q: string) => Promise<{ value: string; label: string }[]>) {
@@ -1073,6 +1075,12 @@ export default function App() {
           {activeNav === 'mobile-checklist' && (
             <Section title="Mobile Checklist">
               <MobileChecklist />
+            </Section>
+          )}
+
+          {activeNav === 'mobile-checklist-flow' && (
+            <Section title="WBL Checklist Flow">
+              <MobileChecklistFlow />
             </Section>
           )}
 
