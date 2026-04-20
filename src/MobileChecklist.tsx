@@ -1,5 +1,3 @@
-import React from 'react'
-
 interface ActivityItem {
   title: string
   meta: string
