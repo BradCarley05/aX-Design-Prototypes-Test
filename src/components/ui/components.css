@@ -1982,11 +1982,17 @@
   gap: var(--space-050);
   flex-shrink: 0;
   cursor: pointer;
+  border: none;
   border-right: 1px solid var(--border-medium);
+  background: none;
+  font-family: var(--font-family);
+  transition: background-color 0.1s ease-in-out;
 }
 .ax-mobile-strip-cell:last-child { border-right: none; }
+.ax-mobile-strip-cell:hover { background-color: var(--bg-secondary-hover); }
 
 .ax-mobile-strip-cell--current { background: var(--primary-100); }
+.ax-mobile-strip-cell--current:hover { background: var(--primary-200); }
 
 .ax-mobile-strip-num {
   font-size: var(--font-size-xsmall);

@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 
-type Screen = 1 | 2 | 3 | 4 | 5 | 6
+type MainScreen = 'overview' | 'checklist' | 'item'
 
 const ITEMS = [
   { id: 1, text: 'Confirm food production requirements from standard recipes', section: 0 },
@@ -19,8 +19,13 @@ const SECTIONS = [
   'Portion and prepare ingredients',
 ]
 
-// Items already achieved before the current session (for item detail screens)
-const PRE_ACHIEVED = new Set([3, 5, 6, 7, 8])
+const ITEM_NOTES: Record<number, { author: string; time: string; text: string }> = {
+  1: {
+    author: 'Julian Bradford',
+    time: '19 Mar 26, 10:56 AM',
+    text: 'The student got this question technically correct but their answer was not one of our alternatives in the gap text question setup',
+  },
+}
 
 function Dot() {
   return <span className="ax-mobile-dot" />
@@ -55,9 +60,11 @@ function MobileHeader({
 function ItemStrip({
   achievedItems,
   currentItem,
+  onSelect,
 }: {
   achievedItems: Set<number>
   currentItem: number
+  onSelect: (id: number) => void
 }) {
   return (
     <div className="ax-mobile-item-strip">
@@ -65,15 +72,17 @@ function ItemStrip({
         const achieved = achievedItems.has(item.id)
         const isCurrent = item.id === currentItem
         return (
-          <div
+          <button
             key={item.id}
             className={`ax-mobile-strip-cell${isCurrent ? ' ax-mobile-strip-cell--current' : ''}`}
+            onClick={() => onSelect(item.id)}
+            aria-label={`Item ${item.id}`}
           >
             <span className={`ax-mobile-strip-num${achieved ? ' ax-mobile-strip-num--achieved' : ''}`}>
               {item.id}
             </span>
             {achieved && <i className="icon-checkbox-checked ax-mobile-strip-tick" />}
-          </div>
+          </button>
         )
       })}
     </div>
@@ -81,13 +90,13 @@ function ItemStrip({
 }
 
 function ItemActionBar({
-  nyaActive,
-  achievedActive,
-  onAchieved,
+  achieved,
+  onMarkAchieved,
+  onMarkNYA,
 }: {
-  nyaActive?: boolean
-  achievedActive?: boolean
-  onAchieved?: () => void
+  achieved: boolean
+  onMarkAchieved: () => void
+  onMarkNYA: () => void
 }) {
   return (
     <div className="ax-mobile-action-bar">
@@ -103,13 +112,16 @@ function ItemActionBar({
         </button>
       </div>
       <div className="ax-mobile-assess-btns">
-        <button className={`ax-mobile-assess-btn${nyaActive ? ' ax-mobile-assess-btn--nya' : ''}`}>
+        <button
+          className={`ax-mobile-assess-btn${!achieved ? ' ax-mobile-assess-btn--nya' : ''}`}
+          onClick={onMarkNYA}
+        >
           <i className="icon-radio-button-checked" />
           Not yet achieved
         </button>
         <button
-          className={`ax-mobile-assess-btn${achievedActive ? ' ax-mobile-assess-btn--achieved' : ''}`}
-          onClick={onAchieved}
+          className={`ax-mobile-assess-btn${achieved ? ' ax-mobile-assess-btn--achieved' : ''}`}
+          onClick={onMarkAchieved}
         >
           <i className="icon-checkbox-checked" />
           Achieved
@@ -119,9 +131,9 @@ function ItemActionBar({
   )
 }
 
-// ─── Screen 1: Milestone Overview ────────────────────────────────────────────
+// ─── Screen: Milestone Overview ───────────────────────────────────────────────
 
-function ScreenOverview({ onNavigate }: { onNavigate: (s: Screen) => void }) {
+function ScreenOverview({ onViewChecklist }: { onViewChecklist: () => void }) {
   return (
     <>
       <MobileHeader
@@ -133,7 +145,7 @@ function ScreenOverview({ onNavigate }: { onNavigate: (s: Screen) => void }) {
           <p className="ax-mobile-section-title">Milestone checklist</p>
           <button
             className="ax-mobile-list-item ax-mobile-list-item--btn"
-            onClick={() => onNavigate(2)}
+            onClick={onViewChecklist}
           >
             <div className="ax-mobile-list-item-text">
               <p className="ax-mobile-list-item-title">Practical Japanese Cooking Techniques</p>
@@ -201,63 +213,34 @@ function ScreenOverview({ onNavigate }: { onNavigate: (s: Screen) => void }) {
   )
 }
 
-// ─── Screen 2: Checklist — Not Started ───────────────────────────────────────
+// ─── Screen: Checklist ────────────────────────────────────────────────────────
 
-function ScreenChecklistNotStarted({ onNavigate }: { onNavigate: (s: Screen) => void }) {
+function ScreenChecklist({
+  achievedItems,
+  onToggleAchieved,
+  onMarkAllAchieved,
+  onViewItem,
+  onBack,
+}: {
+  achievedItems: Set<number>
+  onToggleAchieved: (id: number) => void
+  onMarkAllAchieved: () => void
+  onViewItem: (id: number) => void
+  onBack: () => void
+}) {
+  const count = achievedItems.size
+  const status =
+    count === 0 ? 'Not started' :
+    count === ITEMS.length ? 'Complete' :
+    'In progress'
+
   return (
     <>
       <MobileHeader
         plain
         title="Practical Japanese Cooking Techniques"
-        subtitle={<><span>Not started</span><Dot /><span>Milestone checklist</span></>}
-        onBack={() => onNavigate(1)}
-      />
-      <div className="ax-mobile-body">
-        <div className="ax-mobile-cl-list">
-          {SECTIONS.map((section, sectionIdx) => (
-            <div key={section}>
-              <div className="ax-mobile-cl-section-header">{section}</div>
-              {ITEMS.filter(item => item.section === sectionIdx).map(item => (
-                <div key={item.id} className="ax-mobile-cl-item">
-                  <span className="ax-mobile-cl-item-text">{item.id}. {item.text}</span>
-                  <div className="ax-mobile-cl-item-btns">
-                    <button className="ax-mobile-cl-icon-btn" aria-label="Edit">
-                      <i className="icon-edit-outline" />
-                    </button>
-                    <button
-                      className="ax-mobile-cl-icon-btn"
-                      aria-label="Mark as achieved"
-                      onClick={item.id === 1 ? () => onNavigate(3) : undefined}
-                    >
-                      <i className="icon-checkbox-checked" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-        <div className="ax-mobile-cl-footer">
-          <button className="ax-mobile-cl-mark-btn">
-            <i className="icon-checkbox-checked" />
-            Mark all as Achieved
-          </button>
-        </div>
-      </div>
-    </>
-  )
-}
-
-// ─── Screen 3: Checklist — In Progress (item 1 achieved) ─────────────────────
-
-function ScreenChecklistInProgress({ onNavigate }: { onNavigate: (s: Screen) => void }) {
-  return (
-    <>
-      <MobileHeader
-        plain
-        title="Practical Japanese Cooking Techniques"
-        subtitle={<><span>In progress</span><Dot /><span>Milestone checklist</span></>}
-        onBack={() => onNavigate(1)}
+        subtitle={<><span>{status}</span><Dot /><span>Milestone checklist</span></>}
+        onBack={onBack}
       />
       <div className="ax-mobile-body">
         <div className="ax-mobile-cl-list">
@@ -265,12 +248,12 @@ function ScreenChecklistInProgress({ onNavigate }: { onNavigate: (s: Screen) => 
             <div key={section}>
               <div className="ax-mobile-cl-section-header">{section}</div>
               {ITEMS.filter(item => item.section === sectionIdx).map(item => {
-                const isAchieved = item.id === 1
+                const isAchieved = achievedItems.has(item.id)
                 return (
                   <div key={item.id} className="ax-mobile-cl-item">
                     <button
                       className="ax-mobile-cl-item-btn"
-                      onClick={() => onNavigate(isAchieved ? 6 : 4)}
+                      onClick={() => onViewItem(item.id)}
                     >
                       <span className="ax-mobile-cl-item-text">{item.id}. {item.text}</span>
                     </button>
@@ -280,7 +263,8 @@ function ScreenChecklistInProgress({ onNavigate }: { onNavigate: (s: Screen) => 
                       </button>
                       <button
                         className={`ax-mobile-cl-icon-btn${isAchieved ? ' ax-mobile-cl-icon-btn--achieved' : ''}`}
-                        aria-label={isAchieved ? 'Achieved' : 'Mark as achieved'}
+                        aria-label={isAchieved ? 'Unmark achieved' : 'Mark as achieved'}
+                        onClick={() => onToggleAchieved(item.id)}
                       >
                         <i className="icon-checkbox-checked" />
                       </button>
@@ -292,7 +276,7 @@ function ScreenChecklistInProgress({ onNavigate }: { onNavigate: (s: Screen) => 
           ))}
         </div>
         <div className="ax-mobile-cl-footer">
-          <button className="ax-mobile-cl-mark-btn">
+          <button className="ax-mobile-cl-mark-btn" onClick={onMarkAllAchieved}>
             <i className="icon-checkbox-checked" />
             Mark all as Achieved
           </button>
@@ -302,115 +286,80 @@ function ScreenChecklistInProgress({ onNavigate }: { onNavigate: (s: Screen) => 
   )
 }
 
-// ─── Screen 4: Item Detail — Not Yet Achieved ────────────────────────────────
+// ─── Screen: Item Detail ──────────────────────────────────────────────────────
 
-function ScreenItemNYA({ onNavigate }: { onNavigate: (s: Screen) => void }) {
+function ScreenItemDetail({
+  itemId,
+  achievedItems,
+  onSelectItem,
+  onMarkAchieved,
+  onMarkNYA,
+  onBack,
+}: {
+  itemId: number
+  achievedItems: Set<number>
+  onSelectItem: (id: number) => void
+  onMarkAchieved: (id: number) => void
+  onMarkNYA: (id: number) => void
+  onBack: () => void
+}) {
+  const item = ITEMS.find(i => i.id === itemId)!
+  const isAchieved = achievedItems.has(itemId)
+  const note = ITEM_NOTES[itemId]
+
   return (
     <>
-      <MobileHeader plain title="View checklist item" onBack={() => onNavigate(3)} />
+      <MobileHeader plain title="View checklist item" onBack={onBack} />
       <div className="ax-mobile-body">
-        <ItemStrip achievedItems={PRE_ACHIEVED} currentItem={1} />
+        <ItemStrip achievedItems={achievedItems} currentItem={itemId} onSelect={onSelectItem} />
         <div className="ax-mobile-item-row">
-          <span className="ax-mobile-item-badge">1</span>
-          <span className="ax-mobile-item-label">
-            Confirm food production requirements from standard recipes
-          </span>
+          <span className="ax-mobile-item-badge">{itemId}</span>
+          <span className="ax-mobile-item-label">{item.text}</span>
         </div>
         <div className="ax-mobile-item-scroll">
-          <div className="ax-mobile-empty-state">
-            <div className="ax-mobile-empty-icon">
-              <i className="icon-info-outline" />
-            </div>
-            <p className="ax-mobile-empty-title">Add a note or attach evidence</p>
-            <p className="ax-mobile-empty-desc">
-              You can include photos and videos, or add a comment as text
-            </p>
-          </div>
-        </div>
-        <ItemActionBar nyaActive onAchieved={() => onNavigate(5)} />
-      </div>
-    </>
-  )
-}
-
-// ─── Screen 5: Item Detail — Achieved ────────────────────────────────────────
-
-function ScreenItemAchieved({ onNavigate }: { onNavigate: (s: Screen) => void }) {
-  const achieved = new Set([...PRE_ACHIEVED, 1])
-  return (
-    <>
-      <MobileHeader plain title="View checklist item" onBack={() => onNavigate(3)} />
-      <div className="ax-mobile-body">
-        <ItemStrip achievedItems={achieved} currentItem={1} />
-        <div className="ax-mobile-item-row">
-          <span className="ax-mobile-item-badge">1</span>
-          <span className="ax-mobile-item-label">
-            Confirm food production requirements from standard recipes
-          </span>
-        </div>
-        <div className="ax-mobile-item-scroll">
-          <div className="ax-mobile-empty-state">
-            <div className="ax-mobile-empty-icon">
-              <i className="icon-info-outline" />
-            </div>
-            <p className="ax-mobile-empty-title">Add a note or attach evidence</p>
-            <p className="ax-mobile-empty-desc">
-              You can include photos and videos, or add a comment as text
-            </p>
-          </div>
-        </div>
-        <ItemActionBar achievedActive onAchieved={() => onNavigate(6)} />
-      </div>
-    </>
-  )
-}
-
-// ─── Screen 6: Item Detail — With Notes ──────────────────────────────────────
-
-function ScreenItemWithNotes({ onNavigate }: { onNavigate: (s: Screen) => void }) {
-  const achieved = new Set([...PRE_ACHIEVED, 1])
-  return (
-    <>
-      <MobileHeader plain title="View checklist item" onBack={() => onNavigate(3)} />
-      <div className="ax-mobile-body">
-        <ItemStrip achievedItems={achieved} currentItem={1} />
-        <div className="ax-mobile-item-row">
-          <span className="ax-mobile-item-badge">1</span>
-          <span className="ax-mobile-item-label">
-            Confirm food production requirements from standard recipes
-          </span>
-        </div>
-        <div className="ax-mobile-item-scroll">
-          <div className="ax-mobile-notes-wrap">
-            <p className="ax-mobile-notes-label">Notes</p>
-            <div className="ax-mobile-note">
-              <div className="ax-mobile-note-avatar">
-                <i className="icon-portrait-card-view" />
-              </div>
-              <div className="ax-mobile-note-content">
-                <div className="ax-mobile-note-header">
-                  <div className="ax-mobile-note-meta">
-                    <span className="ax-mobile-note-name">Julian Bradford</span>
-                    <span className="ax-mobile-note-time">19 Mar 26, 10:56 AM</span>
+          {note ? (
+            <div className="ax-mobile-notes-wrap">
+              <p className="ax-mobile-notes-label">Notes</p>
+              <div className="ax-mobile-note">
+                <div className="ax-mobile-note-avatar">
+                  <i className="icon-portrait-card-view" />
+                </div>
+                <div className="ax-mobile-note-content">
+                  <div className="ax-mobile-note-header">
+                    <div className="ax-mobile-note-meta">
+                      <span className="ax-mobile-note-name">{note.author}</span>
+                      <span className="ax-mobile-note-time">{note.time}</span>
+                    </div>
+                    <button className="ax-mobile-action-icon-btn" aria-label="More options">
+                      <i className="icon-chevron-down" />
+                    </button>
                   </div>
-                  <button className="ax-mobile-action-icon-btn" aria-label="More options">
-                    <i className="icon-chevron-down" />
-                  </button>
-                </div>
-                <p className="ax-mobile-note-body">
-                  The student got this question technically correct but their answer was not
-                  one of our alternatives in the gap text question setup
-                </p>
-                <div className="ax-mobile-note-photos">
-                  <div className="ax-mobile-note-photo" />
-                  <div className="ax-mobile-note-photo" />
-                  <div className="ax-mobile-note-photo" />
+                  <p className="ax-mobile-note-body">{note.text}</p>
+                  <div className="ax-mobile-note-photos">
+                    <div className="ax-mobile-note-photo" />
+                    <div className="ax-mobile-note-photo" />
+                    <div className="ax-mobile-note-photo" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="ax-mobile-empty-state">
+              <div className="ax-mobile-empty-icon">
+                <i className="icon-info-outline" />
+              </div>
+              <p className="ax-mobile-empty-title">Add a note or attach evidence</p>
+              <p className="ax-mobile-empty-desc">
+                You can include photos and videos, or add a comment as text
+              </p>
+            </div>
+          )}
         </div>
-        <ItemActionBar achievedActive />
+        <ItemActionBar
+          achieved={isAchieved}
+          onMarkAchieved={() => onMarkAchieved(itemId)}
+          onMarkNYA={() => onMarkNYA(itemId)}
+        />
       </div>
     </>
   )
@@ -419,16 +368,61 @@ function ScreenItemWithNotes({ onNavigate }: { onNavigate: (s: Screen) => void }
 // ─── Root ─────────────────────────────────────────────────────────────────────
 
 export default function MobileChecklistFlow() {
-  const [screen, setScreen] = useState<Screen>(1)
+  const [screen, setScreen] = useState<MainScreen>('overview')
+  const [currentItemId, setCurrentItemId] = useState(1)
+  const [achievedItems, setAchievedItems] = useState<Set<number>>(new Set())
+
+  function toggleAchieved(id: number) {
+    setAchievedItems(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  function markAchieved(id: number) {
+    setAchievedItems(prev => new Set([...prev, id]))
+  }
+
+  function unmarkAchieved(id: number) {
+    setAchievedItems(prev => {
+      const next = new Set(prev)
+      next.delete(id)
+      return next
+    })
+  }
+
+  function viewItem(id: number) {
+    setCurrentItemId(id)
+    setScreen('item')
+  }
+
   return (
     <div className="ax-mobile-preview">
       <div className="ax-mobile-screen">
-        {screen === 1 && <ScreenOverview onNavigate={setScreen} />}
-        {screen === 2 && <ScreenChecklistNotStarted onNavigate={setScreen} />}
-        {screen === 3 && <ScreenChecklistInProgress onNavigate={setScreen} />}
-        {screen === 4 && <ScreenItemNYA onNavigate={setScreen} />}
-        {screen === 5 && <ScreenItemAchieved onNavigate={setScreen} />}
-        {screen === 6 && <ScreenItemWithNotes onNavigate={setScreen} />}
+        {screen === 'overview' && (
+          <ScreenOverview onViewChecklist={() => setScreen('checklist')} />
+        )}
+        {screen === 'checklist' && (
+          <ScreenChecklist
+            achievedItems={achievedItems}
+            onToggleAchieved={toggleAchieved}
+            onMarkAllAchieved={() => setAchievedItems(new Set(ITEMS.map(i => i.id)))}
+            onViewItem={viewItem}
+            onBack={() => setScreen('overview')}
+          />
+        )}
+        {screen === 'item' && (
+          <ScreenItemDetail
+            itemId={currentItemId}
+            achievedItems={achievedItems}
+            onSelectItem={setCurrentItemId}
+            onMarkAchieved={markAchieved}
+            onMarkNYA={unmarkAchieved}
+            onBack={() => setScreen('checklist')}
+          />
+        )}
       </div>
     </div>
   )
