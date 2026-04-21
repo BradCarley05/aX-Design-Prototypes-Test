@@ -207,20 +207,16 @@ export default function App() {
         {/* Sidebar nav */}
         <aside style={{ flexShrink: 0 }} className="ax-sidebar">
           <div style={{ position: 'sticky', top: 80 }}>
-            <div className="ax-sidebar-tabs">
-              <button
-                className={`ax-sidebar-tab${activeTab === 'components' ? ' ax-sidebar-tab--active' : ''}`}
-                onClick={() => { setActiveTab('components'); setActiveNav('buttons') }}
-              >
-                Components
-              </button>
-              <button
-                className={`ax-sidebar-tab${activeTab === 'prototypes' ? ' ax-sidebar-tab--active' : ''}`}
-                onClick={() => { setActiveTab('prototypes'); setActiveNav('mobile-checklist-flow') }}
-              >
-                Prototypes
-              </button>
-            </div>
+            <Tabs value={activeTab} onValueChange={(v) => {
+              const tab = v as 'components' | 'prototypes'
+              setActiveTab(tab)
+              setActiveNav(tab === 'components' ? 'buttons' : 'mobile-checklist-flow')
+            }}>
+              <TabsList style={{ width: '100%', marginBottom: 8 }}>
+                <TabsTrigger value="components" style={{ flex: 1 }}>Components</TabsTrigger>
+                <TabsTrigger value="prototypes" style={{ flex: 1 }}>Prototypes</TabsTrigger>
+              </TabsList>
+            </Tabs>
             <VerticalNavMenu style={{ width: 'auto' }}>
               {(activeTab === 'components' ? COMPONENT_ITEMS : PROTOTYPE_ITEMS).map(([id, label, iconClass]) => (
                 <NavItem
