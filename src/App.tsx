@@ -91,12 +91,12 @@ const COMPONENT_ITEMS = [
   ['tooltip',        'Tooltip',        'icon-info-outline'],
   ['date-picker',    'Date Picker',    'icon-calendar-outline'],
   ['demo-cards',     'Demo Cards',     'icon-portrait-card-view'],
-  ['unit-card',         'Unit Activity Card',      'icon-tag'],
-  ['supervisor-checklist', 'Supervisor Checklist', 'icon-checkbox-checked'],
 ] as const
 
 const PROTOTYPE_ITEMS = [
-  ['mobile-checklist-flow', 'WBL Checklist Flow', 'icon-activities-tasks-list'],
+  ['mobile-checklist-flow',  'WBL Checklist Flow',   'icon-activities-tasks-list'],
+  ['unit-card',              'Unit Activity Card',    'icon-tag'],
+  ['supervisor-checklist',   'Supervisor Checklist',  'icon-checkbox-checked'],
 ] as const
 
 function useAsyncAutocomplete(fetcher: (q: string) => Promise<{ value: string; label: string }[]>) {
