@@ -1587,6 +1587,41 @@
   .ax-sidebar { display: block; }
 }
 
+.ax-sidebar-tabs {
+  display: flex;
+  gap: var(--space-050);
+  margin-bottom: var(--space-100);
+  padding: var(--space-050);
+  background: var(--bg-light);
+  border-radius: var(--radius-element);
+  border: 1px solid var(--border-light);
+}
+
+.ax-sidebar-tab {
+  flex: 1;
+  padding: var(--space-050) var(--space-100);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  font-weight: 500;
+  color: var(--text-light);
+  background: none;
+  border: none;
+  border-radius: var(--radius-element);
+  cursor: pointer;
+  text-align: center;
+  transition: color 0.15s, background 0.15s;
+}
+
+.ax-sidebar-tab:hover {
+  color: var(--text);
+  background: var(--bg-secondary-hover);
+}
+
+.ax-sidebar-tab--active {
+  color: var(--text-button);
+  background: var(--bg-button);
+}
+
 /* Guideline: space between cards should be 20px (--space-250) */
 .ax-card-grid {
   display: grid;

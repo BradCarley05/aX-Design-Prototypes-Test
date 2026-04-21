@@ -252,7 +252,6 @@ function ScreenOverview({ onViewChecklist }: { onViewChecklist: () => void }) {
                 <span>Not started</span>
               </div>
             </div>
-            <i className="icon-arrow-right-short ax-mobile-list-arrow" />
           </button>
         </div>
 

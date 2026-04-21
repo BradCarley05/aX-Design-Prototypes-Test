@@ -39,7 +39,6 @@ import { Option, OptionStack } from '@/components/ui/option'
 import { Tooltip, TooltipProvider, TooltipRoot, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 import { DatePicker } from '@/components/ui/date-picker'
 import type { DateRange } from '@/components/ui/date-picker'
-import MobileChecklist from '@/MobileChecklist'
 import MobileChecklistFlow from '@/MobileChecklistFlow'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -69,28 +68,30 @@ function Row({ label, children }: { label?: string; children: React.ReactNode })
   )
 }
 
-const NAV_ITEMS = [
-  ['buttons',     'Buttons',     'icon-rocket-launch-publish'],
-  ['inputs',      'Inputs',      'icon-text'],
-  ['selects',     'Select',      'icon-chevron-down'],
-  ['checkboxes',  'Checkboxes',  'icon-checkbox-checked'],
-  ['radio',       'Radio',       'icon-radio-button-checked'],
-  ['switches',    'Switch',      'icon-binary'],
-  ['badges',      'Badges',      'icon-tag'],
-  ['spinner',     'Spinner',     'icon-refresh'],
-  ['alerts',      'Alerts',      'icon-note-outline'],
-  ['cards',       'Cards',       'icon-portrait-card-view'],
-  ['tabs',        'Tabs',        'icon-tab'],
-  ['nav',         'Navigation',  'icon-navigation'],
-  ['avatar',      'Avatar',      'icon-contact-add-outline'],
-  ['thumbnail',   'Thumbnail Item', 'icon-image'],
+const COMPONENT_ITEMS = [
+  ['buttons',        'Buttons',        'icon-rocket-launch-publish'],
+  ['inputs',         'Inputs',         'icon-text'],
+  ['selects',        'Select',         'icon-chevron-down'],
+  ['checkboxes',     'Checkboxes',     'icon-checkbox-checked'],
+  ['radio',          'Radio',          'icon-radio-button-checked'],
+  ['switches',       'Switch',         'icon-binary'],
+  ['badges',         'Badges',         'icon-tag'],
+  ['spinner',        'Spinner',        'icon-refresh'],
+  ['alerts',         'Alerts',         'icon-note-outline'],
+  ['cards',          'Cards',          'icon-portrait-card-view'],
+  ['tabs',           'Tabs',           'icon-tab'],
+  ['nav',            'Navigation',     'icon-navigation'],
+  ['avatar',         'Avatar',         'icon-contact-add-outline'],
+  ['thumbnail',      'Thumbnail Item', 'icon-image'],
   ['status-chip',    'Status Chip',    'icon-tag'],
   ['single-select',  'Single Select',  'icon-radio-button-checked'],
   ['autocomplete',   'Autocomplete',   'icon-contact-user-search-people'],
   ['tooltip',        'Tooltip',        'icon-info-outline'],
   ['date-picker',    'Date Picker',    'icon-calendar-outline'],
   ['demo-cards',     'Demo Cards',     'icon-portrait-card-view'],
-  ['mobile-checklist', 'Mobile Checklist', 'icon-activities-tasks-list'],
+] as const
+
+const PROTOTYPE_ITEMS = [
   ['mobile-checklist-flow', 'WBL Checklist Flow', 'icon-activities-tasks-list'],
 ] as const
 
@@ -124,6 +125,7 @@ export default function App() {
   const [opt1, setOpt1] = useState(false)
   const [opt2, setOpt2] = useState(true)
   const [opt3, setOpt3] = useState(false)
+  const [activeTab, setActiveTab] = useState<'components' | 'prototypes'>('components')
   const [activeNav, setActiveNav] = useState<string>('buttons')
   const [pickerDate, setPickerDate] = useState<Date | undefined>()
   const [pickerDateRange, setPickerDateRange] = useState<DateRange | undefined>()
@@ -179,19 +181,35 @@ export default function App() {
 
         {/* Sidebar nav */}
         <aside style={{ flexShrink: 0 }} className="ax-sidebar">
-          <VerticalNavMenu style={{ position: 'sticky', top: 80, width: 'auto' }}>
-            {NAV_ITEMS.map(([id, label, iconClass]) => (
-              <NavItem
-                key={id}
-                flat={false}
-                active={activeNav === id}
-                icon={<i className={iconClass} />}
-                onClick={() => setActiveNav(id)}
+          <div style={{ position: 'sticky', top: 80 }}>
+            <div className="ax-sidebar-tabs">
+              <button
+                className={`ax-sidebar-tab${activeTab === 'components' ? ' ax-sidebar-tab--active' : ''}`}
+                onClick={() => { setActiveTab('components'); setActiveNav('buttons') }}
               >
-                {label}
-              </NavItem>
-            ))}
-          </VerticalNavMenu>
+                Components
+              </button>
+              <button
+                className={`ax-sidebar-tab${activeTab === 'prototypes' ? ' ax-sidebar-tab--active' : ''}`}
+                onClick={() => { setActiveTab('prototypes'); setActiveNav('mobile-checklist-flow') }}
+              >
+                Prototypes
+              </button>
+            </div>
+            <VerticalNavMenu style={{ width: 'auto' }}>
+              {(activeTab === 'components' ? COMPONENT_ITEMS : PROTOTYPE_ITEMS).map(([id, label, iconClass]) => (
+                <NavItem
+                  key={id}
+                  flat={false}
+                  active={activeNav === id}
+                  icon={<i className={iconClass} />}
+                  onClick={() => setActiveNav(id)}
+                >
+                  {label}
+                </NavItem>
+              ))}
+            </VerticalNavMenu>
+          </div>
         </aside>
 
         {/* Main content */}
@@ -1072,13 +1090,7 @@ export default function App() {
             </Section>
           )}
 
-          {activeNav === 'mobile-checklist' && (
-            <Section title="Mobile Checklist">
-              <MobileChecklist />
-            </Section>
-          )}
-
-          {activeNav === 'mobile-checklist-flow' && (
+{activeNav === 'mobile-checklist-flow' && (
             <Section title="WBL Checklist Flow">
               <MobileChecklistFlow />
             </Section>
