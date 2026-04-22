@@ -45,6 +45,7 @@ import type { DateRange } from '@/components/ui/date-picker'
 import MobileChecklistFlow from '@/MobileChecklistFlow'
 import { UnitActivityCard } from '@/components/ui/unit-activity-card'
 import { SupervisorChecklistPage } from '@/components/ui/supervisor-checklist'
+import { EnrolContactsPage } from '@/components/ui/enrol-contacts-page'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -98,6 +99,7 @@ const COMPONENT_ITEMS = [
 
 const PROTOTYPE_ITEMS = [
   ['mobile-checklist-flow',  'WBL Checklist Flow',   'icon-activities-tasks-list'],
+  ['enrol-contacts',         'Enrol Contacts',        'icon-contact-user-search-people'],
   ['unit-card',              'Unit Activity Card',    'icon-tag'],
   ['supervisor-checklist',   'Supervisor Checklist',  'icon-checkbox-checked'],
   ['usi-step',               'USI Step',              'icon-contact-add-outline'],
@@ -1196,6 +1198,12 @@ export default function App() {
 
         </main>
       </div>
+
+      {activeNav === 'enrol-contacts' && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 100 }}>
+          <EnrolContactsPage />
+        </div>
+      )}
     </div>
     </TooltipProvider>
   )

@@ -2480,3 +2480,458 @@
   gap: var(--space-200);
 }
 
+/* ─── Enrol Contacts Page ─────────────────────────────────────────────────── */
+
+.ax-enrol-page {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--bg);
+  font-family: var(--font-family);
+  overflow: hidden;
+}
+
+/* Left panel */
+.ax-enrol-panel {
+  width: 360px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-content);
+  border-right: 1px solid var(--border-medium);
+  overflow-y: auto;
+  padding-bottom: var(--space-300);
+}
+
+.ax-enrol-panel-back {
+  display: flex;
+  align-items: center;
+  padding: var(--space-250) var(--space-300) var(--space-100);
+  flex-shrink: 0;
+}
+
+.ax-enrol-panel-thumbnail {
+  position: relative;
+  margin: 0 var(--space-300);
+  border-radius: var(--radius-element);
+  overflow: hidden;
+  aspect-ratio: 352 / 248;
+  flex-shrink: 0;
+}
+
+.ax-enrol-panel-thumbnail img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ax-enrol-panel-thumbnail-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 100%);
+}
+
+.ax-enrol-panel-thumbnail-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-150);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-075);
+}
+
+.ax-enrol-panel-thumbnail-title {
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  color: white;
+  text-shadow: 0px 1px 2px rgba(51,67,82,0.3), 0px 1px 3px rgba(51,67,82,0.15);
+  line-height: 20px;
+}
+
+.ax-enrol-panel-thumbnail-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-100);
+}
+
+.ax-enrol-panel-thumbnail-id {
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+  line-height: 16px;
+  text-shadow: 0px 1px 2px rgba(51,67,82,0.3);
+}
+
+.ax-enrol-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-300);
+  padding: var(--space-250) var(--space-300) 0;
+}
+
+.ax-enrol-panel-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  line-height: 18px;
+  text-align: left;
+}
+
+.ax-enrol-panel-link:hover { text-decoration: underline; }
+
+.ax-enrol-panel-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-300);
+}
+
+.ax-enrol-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ax-enrol-field-label {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 16px;
+  font-weight: var(--font-weight-regular);
+}
+
+.ax-enrol-field-value {
+  font-size: var(--font-size);
+  color: var(--text);
+  font-weight: var(--font-weight-medium);
+  line-height: 20px;
+}
+
+.ax-enrol-field-value--light {
+  font-weight: var(--font-weight-regular);
+}
+
+.ax-enrol-sessions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-050);
+}
+
+.ax-enrol-session {
+  display: flex;
+  flex-direction: column;
+}
+
+.ax-enrol-session-date {
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--text);
+  line-height: 20px;
+}
+
+.ax-enrol-session-time {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 16px;
+}
+
+.ax-enrol-trainer-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-100);
+}
+
+/* Main panel */
+.ax-enrol-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-content);
+  overflow: hidden;
+}
+
+.ax-enrol-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-150);
+  padding: var(--space-175) var(--space-250);
+  border-bottom: 1px solid var(--border-medium);
+  flex-shrink: 0;
+  background-color: var(--bg-content);
+}
+
+.ax-enrol-topbar-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-round);
+  background-color: var(--primary-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.ax-enrol-topbar-icon img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.ax-enrol-topbar-title {
+  font-size: 18px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text);
+  line-height: 24px;
+}
+
+.ax-enrol-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-150);
+  padding: var(--space-250) var(--space-250) var(--space-200);
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border-medium);
+  background-color: var(--bg-content);
+}
+
+.ax-enrol-controls-search {
+  flex: 1;
+  min-width: 0;
+}
+
+.ax-enrol-controls-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-150);
+  flex-shrink: 0;
+}
+
+.ax-enrol-filter-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-100);
+  padding: var(--space-100) var(--space-250);
+  flex-shrink: 0;
+  background-color: var(--bg-content);
+  border-bottom: 1px solid var(--border-medium);
+}
+
+.ax-enrol-table-wrap {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+}
+
+.ax-enrol-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.ax-enrol-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.ax-enrol-table-th {
+  background-color: var(--bg-content);
+  border-bottom: 1px solid var(--border-medium);
+  padding: 9px var(--space-100);
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-light);
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 16px;
+}
+
+.ax-enrol-table-th--checkbox {
+  width: 44px;
+  padding: 9px var(--space-150);
+}
+
+.ax-enrol-table-th--name { width: auto; }
+.ax-enrol-table-th--phone { width: 150px; }
+.ax-enrol-table-th--city { width: 160px; }
+.ax-enrol-table-th--usi { width: 140px; }
+
+.ax-enrol-table-row td {
+  border-bottom: 1px solid var(--border-medium);
+  vertical-align: middle;
+}
+
+.ax-enrol-table-row:hover td {
+  background-color: var(--bg-secondary-hover);
+}
+
+.ax-enrol-td {
+  padding: 0 var(--space-100);
+  height: 48px;
+  font-size: var(--font-size);
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ax-enrol-td--checkbox {
+  padding: 0 var(--space-150);
+  width: 44px;
+}
+
+.ax-enrol-td--name { min-width: 180px; }
+
+.ax-enrol-contact-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-125);
+}
+
+.ax-enrol-contact-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ax-enrol-contact-name {
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text);
+  line-height: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ax-enrol-contact-email {
+  font-size: 12px;
+  color: var(--text-light);
+  line-height: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ax-enrol-td-text {
+  font-size: var(--font-size);
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Footer */
+.ax-enrol-footer-area {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  background-color: var(--bg-content);
+}
+
+.ax-enrol-selection-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-150) var(--space-250);
+  background-color: var(--bg-secondary-hover);
+  border-top: 1px solid var(--border-medium);
+  border-bottom: 1px solid var(--border-medium);
+}
+
+.ax-enrol-selection-msg {
+  font-size: var(--font-size);
+  color: var(--text);
+  line-height: 20px;
+}
+
+.ax-enrol-pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--space-050);
+  padding: var(--space-150) var(--space-250);
+  border-top: 1px solid var(--border-medium);
+}
+
+.ax-enrol-per-page {
+  display: flex;
+  align-items: center;
+  gap: var(--space-050);
+  margin-right: var(--space-100);
+}
+
+.ax-enrol-per-page-label {
+  font-size: var(--font-size);
+  color: var(--text);
+}
+
+.ax-enrol-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 var(--space-050);
+  border-radius: var(--radius-button-sm);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--font-family);
+  color: var(--text);
+  transition: background-color 0.1s;
+}
+
+.ax-enrol-page-btn:hover { background-color: var(--bg-secondary-hover); }
+
+.ax-enrol-page-btn--active {
+  background-color: var(--bg-button);
+  color: var(--text-button);
+  font-weight: var(--font-weight-medium);
+}
+
+.ax-enrol-page-btn--active:hover { background-color: var(--bg-button-hover); }
+
+.ax-enrol-page-btn--nav {
+  color: var(--text-light);
+  gap: var(--space-025);
+  padding: 0 var(--space-075);
+}
+
+.ax-enrol-page-btn--nav:disabled { color: var(--text-disabled); cursor: default; }
+.ax-enrol-page-btn--nav:disabled:hover { background: none; }
+
+.ax-enrol-page-count {
+  font-size: var(--font-size);
+  color: var(--text-light);
+  margin-left: auto;
+}
+
+/* Thumbnail chip status on dark bg */
+.ax-enrol-thumb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-050);
+  padding: var(--space-050) var(--space-075);
+  border-radius: var(--radius-button-sm);
+  background-color: var(--bg-element);
+  box-shadow: var(--shadow-element);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-light);
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+
