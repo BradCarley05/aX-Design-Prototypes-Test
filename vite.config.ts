@@ -8,6 +8,9 @@ export default defineConfig({
   server: {
     allowedHosts: ['dividers-culinary-unending.ngrok-free.dev'],
   },
+  build: {
+    chunkSizeWarningLimit: 1500,
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

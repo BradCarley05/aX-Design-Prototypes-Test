@@ -1,3 +1,4 @@
+import 'ax-arc-prototyping/styles'
 import { useState, useRef, useEffect, type RefObject, type ChangeEvent } from 'react'
 import {
   Avatar,
