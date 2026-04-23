@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, type RefObject } from 'react'
+import { useState, useRef, useEffect, type RefObject, type ChangeEvent } from 'react'
 import {
   Avatar,
   Button,
@@ -311,7 +311,7 @@ function SupervisorDropdown({
       <div style={{ padding: '8px 12px', flexShrink: 0 }}>
         <Input
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
           placeholder="Search supervisors…"
           autoFocus
         />
