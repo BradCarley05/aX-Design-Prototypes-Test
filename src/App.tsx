@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
 import { LearnerOnboardingUSI } from '@/pages/LearnerOnboardingUSI'
 import { OnboardingSurvey } from '@/pages/OnboardingSurvey'
@@ -108,6 +108,15 @@ const PROTOTYPE_ITEMS = [
   ['survey',                 'Survey',                'icon-note-outline'],
 ] as const
 
+function getNavFromHash(): string {
+  const hash = window.location.hash.replace(/^#\//, '')
+  return hash || 'buttons'
+}
+
+function getTabFromNav(nav: string): 'components' | 'prototypes' {
+  return PROTOTYPE_ITEMS.some(([id]) => id === nav) ? 'prototypes' : 'components'
+}
+
 function useAsyncAutocomplete(fetcher: (q: string) => Promise<{ value: string; label: string }[]>) {
   const [options, setOptions] = useState<{ value: string; label: string }[]>([])
   const [loading, setLoading] = useState(false)
@@ -138,8 +147,22 @@ export default function App() {
   const [opt1, setOpt1] = useState(false)
   const [opt2, setOpt2] = useState(true)
   const [opt3, setOpt3] = useState(false)
-  const [activeTab, setActiveTab] = useState<'components' | 'prototypes'>('components')
-  const [activeNav, setActiveNav] = useState<string>('buttons')
+  const [activeNav, setActiveNav] = useState<string>(getNavFromHash)
+  const [activeTab, setActiveTab] = useState<'components' | 'prototypes'>(() => getTabFromNav(getNavFromHash()))
+
+  useEffect(() => {
+    window.location.hash = `/${activeNav}`
+  }, [activeNav])
+
+  useEffect(() => {
+    function onHashChange() {
+      const nav = getNavFromHash()
+      setActiveNav(nav)
+      setActiveTab(getTabFromNav(nav))
+    }
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
   const [pickerDate, setPickerDate] = useState<Date | undefined>()
   const [pickerDateRange, setPickerDateRange] = useState<DateRange | undefined>()
 
