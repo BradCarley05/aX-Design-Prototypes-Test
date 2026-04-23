@@ -1,15 +1,10 @@
-import 'ax-arc-prototyping/styles'
 import { useState, useRef, useEffect, type RefObject, type ChangeEvent } from 'react'
-import {
-  Avatar,
-  Button,
-  Input,
-  NavItem,
-  StatusChip,
-  VerticalNavMenu,
-} from 'ax-arc-prototyping'
-
-type StatusChipType = 'base' | 'positive' | 'negative' | 'interim' | 'try-again' | 'submitted'
+import { Avatar } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { NavItem, VerticalNavMenu } from '@/components/ui/nav'
+import { StatusChip } from '@/components/ui/status-chip'
+import type { StatusChipType } from '@/components/ui/status-chip'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -565,12 +560,10 @@ export function UnitActivityView() {
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Button variant="secondary">
-                <i className="icon-edit-outline" />
+              <Button variant="secondary" leftIcon={<i className="icon-edit-outline" />}>
                 Edit activity
               </Button>
-              <Button variant="default">
-                <i className="icon-plus" />
+              <Button variant="default" leftIcon={<i className="icon-plus" />}>
                 Add student
               </Button>
             </div>
@@ -667,8 +660,7 @@ export function UnitActivityView() {
                   {requirements.length}
                 </span>
               </div>
-              <Button variant="secondary" size="sm">
-                <i className="icon-filter-outline" />
+              <Button variant="secondary" leftIcon={<i className="icon-filter-outline" />}>
                 Filter
               </Button>
             </div>

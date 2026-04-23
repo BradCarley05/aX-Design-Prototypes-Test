@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from 'react'
+import React, { useState } from 'react'
 import './App.css'
 import { LearnerOnboardingUSI } from '@/pages/LearnerOnboardingUSI'
 import { OnboardingSurvey } from '@/pages/OnboardingSurvey'
@@ -46,9 +46,7 @@ import MobileChecklistFlow from '@/MobileChecklistFlow'
 import { UnitActivityCard } from '@/components/ui/unit-activity-card'
 import { SupervisorChecklistPage } from '@/components/ui/supervisor-checklist'
 import { EnrolContactsPage } from '@/components/ui/enrol-contacts-page'
-const UnitActivityView = lazy(() =>
-  import('@/pages/UnitActivityView').then(m => ({ default: m.UnitActivityView }))
-)
+import { UnitActivityView } from '@/pages/UnitActivityView'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -188,24 +186,22 @@ export default function App() {
 
   if (activeNav === 'unit-activity-view') {
     return (
-      <Suspense fallback={null}>
-        <TooltipProvider>
-          <div style={{ position: 'fixed', inset: 0, zIndex: 100 }}>
-            <UnitActivityView />
-          </div>
-          <button
-            onClick={() => setActiveNav('buttons')}
-            style={{
-              position: 'fixed', top: 12, right: 12, zIndex: 200,
-              background: 'rgba(0,0,0,0.5)', color: 'white',
-              border: 'none', borderRadius: 6, padding: '6px 12px',
-              cursor: 'pointer', fontSize: 13, fontWeight: 500,
-            }}
-          >
-            ✕ Close demo
-          </button>
-        </TooltipProvider>
-      </Suspense>
+      <TooltipProvider>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 100 }}>
+          <UnitActivityView />
+        </div>
+        <button
+          onClick={() => setActiveNav('buttons')}
+          style={{
+            position: 'fixed', top: 12, right: 12, zIndex: 200,
+            background: 'rgba(0,0,0,0.5)', color: 'white',
+            border: 'none', borderRadius: 6, padding: '6px 12px',
+            cursor: 'pointer', fontSize: 13, fontWeight: 500,
+          }}
+        >
+          ✕ Close demo
+        </button>
+      </TooltipProvider>
     )
   }
 
