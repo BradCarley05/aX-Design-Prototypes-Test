@@ -1,24 +1,14 @@
 import { useState, useRef, useEffect, type RefObject } from 'react'
-import { StatusChip } from '@/components/ui/status-chip'
-import type { StatusChipType } from '@/components/ui/status-chip'
+import {
+  Avatar,
+  Button,
+  Input,
+  NavItem,
+  StatusChip,
+  VerticalNavMenu,
+} from 'ax-arc-prototyping'
 
-function InitialsAvatar({ initials, size = 36, border }: { initials: string; size?: number; border?: string }) {
-  return (
-    <div style={{
-      width: size, height: size, borderRadius: '50%',
-      backgroundColor: 'var(--primary-200)',
-      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-      flexShrink: 0,
-      fontSize: Math.max(9, Math.round(size * 0.36)),
-      fontWeight: 600,
-      color: 'var(--primary-900)',
-      border: border ?? 'none',
-      lineHeight: 1,
-    }}>
-      {initials}
-    </div>
-  )
-}
+type StatusChipType = 'base' | 'positive' | 'negative' | 'interim' | 'try-again' | 'submitted'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -28,7 +18,6 @@ interface Requirement {
   id: string
   studentName: string
   studentInitials: string
-  studentRole: string
   tasksRequired: number
   tasksCompleted: number
   status: 'not-started' | 'interim' | 'submitted' | 'positive'
@@ -62,7 +51,6 @@ const INITIAL_REQUIREMENTS: Requirement[] = [
     id: 'r1',
     studentName: 'Paige Jones',
     studentInitials: 'PJ',
-    studentRole: 'Learner',
     tasksRequired: 8,
     tasksCompleted: 0,
     status: 'not-started',
@@ -72,17 +60,18 @@ const INITIAL_REQUIREMENTS: Requirement[] = [
     id: 'r2',
     studentName: 'Fredo Corta',
     studentInitials: 'FC',
-    studentRole: 'Learner',
     tasksRequired: 8,
     tasksCompleted: 3,
     status: 'interim',
-    supervisors: [{ id: 's2', name: 'Philippa Jones', initials: 'PJ' }, { id: 's3', name: 'Tim Mason', initials: 'TM' }],
+    supervisors: [
+      { id: 's2', name: 'Philippa Jones', initials: 'PJ' },
+      { id: 's3', name: 'Tim Mason', initials: 'TM' },
+    ],
   },
   {
     id: 'r3',
     studentName: 'Yuki Tanaka',
     studentInitials: 'YT',
-    studentRole: 'Learner',
     tasksRequired: 8,
     tasksCompleted: 8,
     status: 'submitted',
@@ -92,7 +81,6 @@ const INITIAL_REQUIREMENTS: Requirement[] = [
     id: 'r4',
     studentName: 'Amara Okafor',
     studentInitials: 'AO',
-    studentRole: 'Learner',
     tasksRequired: 8,
     tasksCompleted: 8,
     status: 'positive',
@@ -116,18 +104,18 @@ const STATUS_LABEL: Record<Requirement['status'], string> = {
   positive:      'Achieved',
 }
 
-// ─── Nav ──────────────────────────────────────────────────────────────────────
+// ─── Global nav ───────────────────────────────────────────────────────────────
 
 function GlobalNav() {
   const navItems = [
-    { icon: 'icon-home-outline',                  label: 'Dashboard' },
-    { icon: 'icon-contact-user-search-people',    label: 'My Groups',     active: false },
-    { icon: 'icon-activities-tasks-list',         label: 'Activities',    active: true },
-    { icon: 'icon-checkbox-checked',              label: 'Assessments' },
-    { icon: 'icon-note-outline',                  label: 'Workbooks' },
-    { icon: 'icon-calendar-outline',              label: 'Calendar' },
-    { icon: 'icon-tag',                           label: 'Records' },
-    { icon: 'icon-navigation',                    label: 'Configuration' },
+    { icon: 'icon-home-outline',               label: 'Dashboard' },
+    { icon: 'icon-contact-user-search-people', label: 'My Groups' },
+    { icon: 'icon-activities-tasks-list',      label: 'Activities',    active: true },
+    { icon: 'icon-checkbox-checked',           label: 'Assessments' },
+    { icon: 'icon-note-outline',               label: 'Workbooks' },
+    { icon: 'icon-calendar-outline',           label: 'Calendar' },
+    { icon: 'icon-tag',                        label: 'Records' },
+    { icon: 'icon-navigation',                 label: 'Configuration' },
   ]
 
   return (
@@ -164,46 +152,24 @@ function GlobalNav() {
       </div>
 
       {/* Search */}
-      <div style={{ padding: '8px 12px', borderBottom: '1px solid var(--border-medium)', flexShrink: 0 }}>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          backgroundColor: 'var(--bg)',
-          borderRadius: 'var(--radius-input)',
-          border: '1px solid var(--border-medium)',
-          padding: '5px 8px',
-        }}>
-          <i className="icon-search" style={{ color: 'var(--text-light)', fontSize: 14 }} />
-          <span style={{ fontSize: 'var(--font-size-small)', color: 'var(--text-placeholder)' }}>Search…</span>
-        </div>
+      <div style={{ padding: '8px 10px', borderBottom: '1px solid var(--border-medium)', flexShrink: 0 }}>
+        <Input placeholder="Search…" />
       </div>
 
       {/* Nav items */}
-      <nav style={{ flex: 1, overflow: 'auto', padding: '8px 8px' }}>
-        {navItems.map((item) => (
-          <div
-            key={item.label}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              padding: '6px 8px',
-              borderRadius: 'var(--radius-element)',
-              marginBottom: 2,
-              backgroundColor: item.active ? 'var(--primary-200)' : 'transparent',
-              cursor: 'pointer',
-            }}
-          >
-            <i className={item.icon} style={{
-              fontSize: 16,
-              color: item.active ? 'var(--primary-700)' : 'var(--text-light)',
-            }} />
-            <span style={{
-              fontSize: 'var(--font-size-small)',
-              fontWeight: item.active ? 600 : 400,
-              color: item.active ? 'var(--primary-700)' : 'var(--text)',
-            }}>
+      <nav style={{ flex: 1, overflow: 'auto', padding: '6px 8px' }}>
+        <VerticalNavMenu style={{ width: 'auto' }}>
+          {navItems.map((item) => (
+            <NavItem
+              key={item.label}
+              flat={false}
+              active={item.active ?? false}
+              icon={<i className={item.icon} />}
+            >
               {item.label}
-            </span>
-          </div>
-        ))}
+            </NavItem>
+          ))}
+        </VerticalNavMenu>
       </nav>
 
       {/* User */}
@@ -213,7 +179,7 @@ function GlobalNav() {
         display: 'flex', alignItems: 'center', gap: 8,
         flexShrink: 0,
       }}>
-        <InitialsAvatar initials="JB" size={28} />
+        <Avatar mode="initials" shape="circle" initials="JB" />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 'var(--font-size-small)', fontWeight: 500, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             Jacob Jones
@@ -251,7 +217,6 @@ function SupervisorDropdown({
         s.role.toLowerCase().includes(query.toLowerCase()))
   )
 
-  // Close on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (
@@ -322,7 +287,7 @@ function SupervisorDropdown({
                 borderRadius: 'var(--radius-element)',
                 backgroundColor: 'var(--primary-100)',
               }}>
-                <InitialsAvatar initials={sup.initials} size={24} />
+                <Avatar mode="initials" shape="circle" initials={sup.initials} />
                 <span style={{ flex: 1, fontSize: 'var(--font-size-small)', color: 'var(--text)', fontWeight: 500 }}>
                   {sup.name}
                 </span>
@@ -344,34 +309,16 @@ function SupervisorDropdown({
 
       {/* Search */}
       <div style={{ padding: '8px 12px', flexShrink: 0 }}>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          backgroundColor: 'var(--bg)',
-          borderRadius: 'var(--radius-input)',
-          border: '1px solid var(--border-medium)',
-          padding: '5px 8px',
-        }}>
-          <i className="icon-search" style={{ color: 'var(--text-light)', fontSize: 13 }} />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search supervisors…"
-            style={{
-              flex: 1, border: 'none', outline: 'none', background: 'none',
-              fontSize: 'var(--font-size-small)', color: 'var(--text)',
-              fontFamily: 'var(--font-family)',
-            }}
-            autoFocus
-          />
-        </div>
+        <Input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search supervisors…"
+          autoFocus
+        />
       </div>
 
-      {/* Scrollable supervisor list */}
-      <div style={{
-        overflowY: 'auto',
-        maxHeight: 220,
-        padding: '0 8px 8px',
-      }}>
+      {/* Scrollable list */}
+      <div style={{ overflowY: 'auto', maxHeight: 220, padding: '0 8px 8px' }}>
         {filtered.length === 0 ? (
           <div style={{
             padding: '16px 0', textAlign: 'center',
@@ -394,7 +341,7 @@ function SupervisorDropdown({
               onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--bg-secondary-hover)')}
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
             >
-              <InitialsAvatar initials={sup.initials} size={28} />
+              <Avatar mode="initials" shape="circle" initials={sup.initials} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 'var(--font-size-small)', fontWeight: 500, color: 'var(--text)' }}>
                   {sup.name}
@@ -445,8 +392,9 @@ function RequirementRow({
       borderBottom: '1px solid var(--border-light)',
       position: 'relative',
     }}>
-      {/* Avatar + name */}
-      <InitialsAvatar initials={req.studentInitials} size={32} />
+      <Avatar mode="initials" shape="circle" initials={req.studentInitials} />
+
+      {/* Name + task count */}
       <div style={{ flex: '0 0 160px', minWidth: 0 }}>
         <div style={{ fontSize: 'var(--font-size-small)', fontWeight: 500, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
           {req.studentName}
@@ -458,26 +406,23 @@ function RequirementRow({
 
       {/* Progress bar */}
       <div style={{ flex: '0 0 80px' }}>
-        <div style={{
-          height: 4, borderRadius: 2,
-          backgroundColor: 'var(--neutral-200)',
-          overflow: 'hidden',
-        }}>
+        <div style={{ height: 4, borderRadius: 2, backgroundColor: 'var(--neutral-200)', overflow: 'hidden' }}>
           <div style={{
             height: '100%',
             width: `${progressPct}%`,
             borderRadius: 2,
-            backgroundColor: req.status === 'positive' ? 'var(--positive-700)'
-              : req.status === 'submitted' ? 'var(--primary-700)'
-              : req.status === 'interim' ? 'var(--warning-700)'
-              : 'var(--neutral-300)',
+            backgroundColor:
+              req.status === 'positive'  ? 'var(--positive-700)' :
+              req.status === 'submitted' ? 'var(--primary-700)' :
+              req.status === 'interim'   ? 'var(--warning-700)' :
+              'var(--neutral-300)',
             transition: 'width 0.3s ease',
           }} />
         </div>
       </div>
 
       {/* Status chip */}
-      <div style={{ flex: '0 0 100px' }}>
+      <div style={{ flex: '0 0 110px' }}>
         <StatusChip type={STATUS_CHIP_MAP[req.status]} size="small" icon>
           {STATUS_LABEL[req.status]}
         </StatusChip>
@@ -485,22 +430,21 @@ function RequirementRow({
 
       {/* Supervisors + add button */}
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'flex-end', position: 'relative' }}>
-        {/* Stacked supervisor avatars */}
+        {/* Stacked avatars */}
         {req.supervisors.length > 0 && (
           <div style={{ display: 'flex', alignItems: 'center' }}>
             {req.supervisors.slice(0, 3).map((sup, i) => (
               <div key={sup.id} style={{ marginLeft: i === 0 ? 0 : -8, zIndex: 3 - i }}>
-                <InitialsAvatar initials={sup.initials} size={24} border="2px solid var(--bg-element)" />
+                <Avatar mode="initials" shape="circle" initials={sup.initials} />
               </div>
             ))}
             {req.supervisors.length > 3 && (
               <div style={{
-                width: 24, height: 24, borderRadius: '50%',
+                width: 36, height: 36, borderRadius: '50%',
                 backgroundColor: 'var(--neutral-200)',
-                border: '2px solid var(--bg-element)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                marginLeft: -8, zIndex: 0,
-                fontSize: 10, fontWeight: 600, color: 'var(--text-light)',
+                marginLeft: -8,
+                fontSize: 11, fontWeight: 600, color: 'var(--text-light)',
               }}>
                 +{req.supervisors.length - 3}
               </div>
@@ -508,7 +452,7 @@ function RequirementRow({
           </div>
         )}
 
-        {/* Add/manage supervisors button */}
+        {/* Add/manage button */}
         <button
           ref={triggerRef}
           onClick={() => setDropdownOpen((v) => !v)}
@@ -529,7 +473,6 @@ function RequirementRow({
           {req.supervisors.length === 0 ? 'Add supervisor' : 'Manage'}
         </button>
 
-        {/* Dropdown */}
         {dropdownOpen && (
           <SupervisorDropdown
             assigned={req.supervisors}
@@ -556,7 +499,9 @@ export function UnitActivityView() {
     )
   }
 
-  const completedCount = requirements.filter((r) => r.status === 'positive' || r.status === 'submitted').length
+  const completedCount = requirements.filter(
+    (r) => r.status === 'positive' || r.status === 'submitted'
+  ).length
 
   return (
     <div style={{
@@ -569,7 +514,6 @@ export function UnitActivityView() {
     }}>
       <GlobalNav />
 
-      {/* Main */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
         {/* Top bar */}
@@ -620,37 +564,14 @@ export function UnitActivityView() {
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <button style={{
-                display: 'flex', alignItems: 'center', gap: 6,
-                padding: '6px 12px',
-                backgroundColor: 'var(--bg-element)',
-                border: '1px solid var(--border-medium)',
-                borderRadius: 'var(--radius-button)',
-                cursor: 'pointer',
-                fontSize: 'var(--font-size-small)',
-                fontFamily: 'var(--font-family)',
-                color: 'var(--text)',
-                fontWeight: 500,
-              }}>
-                <i className="icon-edit-outline" style={{ fontSize: 16 }} />
+              <Button variant="secondary">
+                <i className="icon-edit-outline" />
                 Edit activity
-              </button>
-              <button style={{
-                padding: '6px 12px',
-                backgroundColor: 'var(--bg-button)',
-                border: 'none',
-                borderRadius: 'var(--radius-button)',
-                cursor: 'pointer',
-                fontSize: 'var(--font-size-small)',
-                fontFamily: 'var(--font-family)',
-                color: '#fff',
-                fontWeight: 500,
-                boxShadow: 'var(--shadow-button)',
-                display: 'flex', alignItems: 'center', gap: 6,
-              }}>
-                <i className="icon-plus" style={{ fontSize: 16 }} />
+              </Button>
+              <Button variant="default">
+                <i className="icon-plus" />
                 Add student
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -677,7 +598,7 @@ export function UnitActivityView() {
           </div>
         </div>
 
-        {/* Content */}
+        {/* Scrollable content */}
         <div style={{ flex: 1, overflow: 'auto', padding: 'var(--space-300)' }}>
 
           {/* Summary card */}
@@ -704,7 +625,7 @@ export function UnitActivityView() {
                 Required task for unit completion
               </div>
               <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--text-light)' }}>
-                Completed by students against any strong explicit criterion? Leave as it is for now. Learner to complete all 8 tasks.
+                Learner must complete all 8 tasks to satisfy this activity requirement.
               </div>
             </div>
             <div style={{ textAlign: 'right', flexShrink: 0 }}>
@@ -717,7 +638,7 @@ export function UnitActivityView() {
             </div>
           </div>
 
-          {/* Activity requirements table */}
+          {/* Requirements table */}
           <div style={{
             backgroundColor: 'var(--bg-element)',
             borderRadius: 'var(--radius-card)',
@@ -726,18 +647,15 @@ export function UnitActivityView() {
           }}>
             {/* Table header */}
             <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '12px var(--space-200)',
               borderBottom: '1px solid var(--border-medium)',
             }}>
-              <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ fontSize: 'var(--font-size-base)', fontWeight: 600, color: 'var(--text)' }}>
                   Activity requirements
                 </span>
                 <span style={{
-                  marginLeft: 8,
                   backgroundColor: 'var(--neutral-200)',
                   borderRadius: 'var(--radius-round)',
                   padding: '1px 7px',
@@ -748,49 +666,26 @@ export function UnitActivityView() {
                   {requirements.length}
                 </span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <button style={{
-                  display: 'flex', alignItems: 'center', gap: 4,
-                  padding: '5px 10px',
-                  background: 'none',
-                  border: '1px solid var(--border-medium)',
-                  borderRadius: 'var(--radius-button)',
-                  cursor: 'pointer',
-                  fontSize: 'var(--font-size-xsmall)',
-                  fontFamily: 'var(--font-family)',
-                  color: 'var(--text-light)',
-                }}>
-                  <i className="icon-filter-outline" style={{ fontSize: 13 }} />
-                  Filter
-                </button>
-              </div>
+              <Button variant="secondary" size="sm">
+                <i className="icon-filter-outline" />
+                Filter
+              </Button>
             </div>
 
             {/* Column labels */}
             <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--space-150)',
+              display: 'flex', alignItems: 'center', gap: 'var(--space-150)',
               padding: '6px var(--space-200)',
               backgroundColor: 'var(--bg-secondary)',
               borderBottom: '1px solid var(--border-light)',
             }}>
-              <div style={{ width: 32, flexShrink: 0 }} />
-              <div style={{ flex: '0 0 160px', fontSize: 'var(--font-size-xsmall)', fontWeight: 500, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Student
-              </div>
-              <div style={{ flex: '0 0 80px', fontSize: 'var(--font-size-xsmall)', fontWeight: 500, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Progress
-              </div>
-              <div style={{ flex: '0 0 100px', fontSize: 'var(--font-size-xsmall)', fontWeight: 500, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Status
-              </div>
-              <div style={{ flex: 1, fontSize: 'var(--font-size-xsmall)', fontWeight: 500, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.04em', textAlign: 'right' }}>
-                Supervisors
-              </div>
+              <div style={{ width: 36, flexShrink: 0 }} />
+              <div style={{ flex: '0 0 160px', fontSize: 'var(--font-size-xsmall)', fontWeight: 500, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Student</div>
+              <div style={{ flex: '0 0 80px', fontSize: 'var(--font-size-xsmall)', fontWeight: 500, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Progress</div>
+              <div style={{ flex: '0 0 110px', fontSize: 'var(--font-size-xsmall)', fontWeight: 500, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Status</div>
+              <div style={{ flex: 1, fontSize: 'var(--font-size-xsmall)', fontWeight: 500, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '0.04em', textAlign: 'right' }}>Supervisors</div>
             </div>
 
-            {/* Rows */}
             {requirements.map((req) => (
               <RequirementRow
                 key={req.id}
