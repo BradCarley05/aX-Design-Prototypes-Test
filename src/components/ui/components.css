@@ -3695,4 +3695,81 @@
   line-height: 14px;
 }
 
+/* ─── Workshop Refresh – matrix cell table ────────────────────────────────── */
+
+.wsr-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: max-content;
+  font-family: var(--font-family);
+}
+
+/* Header cells */
+.wsr-th {
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-content);
+  z-index: 2;
+  padding: var(--space-100) var(--space-125);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-light);
+  border-bottom: 1px solid var(--border-medium);
+  white-space: nowrap;
+  vertical-align: bottom;
+  line-height: 16px;
+}
+
+.wsr-th--check  { width: 40px; padding-left: var(--space-200); text-align: left; }
+.wsr-th--learner { min-width: 220px; text-align: left; }
+.wsr-th--center { width: 72px; text-align: center; border-right: 1px solid var(--border-medium); }
+.wsr-th--unit   { width: 72px; text-align: center; border-right: 1px solid var(--border-medium); }
+
+/* Body rows */
+.wsr-row { border-bottom: 1px solid var(--border-light); }
+.wsr-row:hover { background-color: var(--bg-secondary-hover); }
+.wsr-row--selected { background-color: var(--primary-100); }
+
+/* Body cells */
+.wsr-td {
+  vertical-align: middle;
+  height: 48px;
+}
+
+.wsr-td--check  { width: 40px; padding: 6px var(--space-200); }
+.wsr-td--learner { padding: 6px var(--space-125); }
+.wsr-td--cell   {
+  padding: 6px 8px;
+  text-align: center;
+  border-right: 1px solid var(--border-medium);
+}
+
+/* Matrix cell – 36×36 square chip */
+.wsr-matrix-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-button);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.wsr-matrix-cell--c   { background-color: var(--positive-200); color: var(--text-positive); }
+.wsr-matrix-cell--nys { background-color: var(--bg-light);     color: var(--text-light); }
+.wsr-matrix-cell--ip  { background-color: var(--warning-200);  color: var(--text-warning); }
+.wsr-matrix-cell--cna { background-color: var(--negative-200); color: var(--text-negative); }
+.wsr-matrix-cell--w   { background-color: var(--negative-200); color: var(--text-negative); }
+.wsr-matrix-cell--rpl { background-color: var(--positive-200); color: var(--text-positive); }
+.wsr-matrix-cell--ct  { background-color: var(--info-200);     color: var(--text-info); }
+
+.wsr-matrix-cell--pct-full { background-color: var(--positive-200); color: var(--text-positive); }
+.wsr-matrix-cell--pct-high { background-color: var(--positive-200); color: var(--text-positive); }
+.wsr-matrix-cell--pct-mid  { background-color: var(--warning-200);  color: var(--text-warning); }
+.wsr-matrix-cell--pct-low  { background-color: var(--warning-200);  color: var(--text-warning); }
+.wsr-matrix-cell--pct-zero { background-color: var(--bg-light);     color: var(--text-light); }
+
 
