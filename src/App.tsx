@@ -47,7 +47,6 @@ import { UnitActivityCard } from '@/components/ui/unit-activity-card'
 import { SupervisorChecklistPage } from '@/components/ui/supervisor-checklist'
 import { EnrolContactsPage } from '@/components/ui/enrol-contacts-page'
 import { UnitActivityView } from '@/pages/UnitActivityView'
-import { CakeOrderForm } from '@/pages/CakeOrderForm'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

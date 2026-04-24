@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { NavItem, VerticalNavMenu } from "@/components/ui/nav"
-import { Avatar } from "@/components/ui/avatar"
 
 /* ─── SVG icons ──────────────────────────────────────────────────────────── */
 
@@ -90,14 +88,6 @@ function PaperclipIcon() {
   )
 }
 
-function GridIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect width="7" height="7" x="3" y="3" rx="1" /><rect width="7" height="7" x="14" y="3" rx="1" />
-      <rect width="7" height="7" x="14" y="14" rx="1" /><rect width="7" height="7" x="3" y="14" rx="1" />
-    </svg>
-  )
-}
 
 /* ─── Types ──────────────────────────────────────────────────────────────── */
 
