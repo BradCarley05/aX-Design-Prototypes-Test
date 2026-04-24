@@ -15,9 +15,10 @@ const F_EMPTY_BG          = 'https://www.figma.com/api/mcp/asset/e9eb0159-4953-4
 const F_EMPTY_ILLUS       = 'https://www.figma.com/api/mcp/asset/c7b66254-3e10-4b79-bd35-c32b78981169'
 
 const PROTOTYPE_ITEMS = [
-  { id: 'mobile-checklist-flow', label: 'WBL Checklist Flow',  icon: 'icon-activities-tasks-list' },
-  { id: 'supervisor-checklist',  label: 'Supervisor Checklist', icon: 'icon-checkbox-checked'      },
-  { id: 'unit-activity-view',    label: 'Unit Activity View',   icon: 'icon-portrait-card-view'    },
+  { id: null,                     label: 'Dashboard',           icon: 'icon-home-house-building'   },
+  { id: 'mobile-checklist-flow',  label: 'WBL Checklist Flow',  icon: 'icon-activities-tasks-list' },
+  { id: 'supervisor-checklist',   label: 'Supervisor Checklist', icon: 'icon-checkbox-checked'     },
+  { id: 'unit-activity-view',     label: 'Unit Activity View',   icon: 'icon-portrait-card-view'   },
 ] as const
 
 function getProtoFromHash(): string | null {
@@ -108,7 +109,7 @@ export default function PrototypesApp() {
               const active = activeProto === id
               return (
                 <button
-                  key={id}
+                  key={id ?? 'dashboard'}
                   onClick={() => setActiveProto(id)}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 8,
