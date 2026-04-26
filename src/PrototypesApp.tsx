@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import MobileChecklistFlow from './MobileChecklistFlow'
 import { SupervisorChecklistPage } from './components/ui/supervisor-checklist'
 import { UnitActivityView } from './pages/UnitActivityView'
+import { WorkshopPage } from './components/ui/workshop-page'
+import { WorkshopRefreshPage } from './components/ui/workshop-refresh-page'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
 // Figma asset URLs — expire ~7 days after last design fetch
@@ -19,6 +21,8 @@ const PROTOTYPE_ITEMS = [
   { id: 'mobile-checklist-flow',  label: 'WBL Checklist Flow',  icon: 'icon-activities-tasks-list' },
   { id: 'supervisor-checklist',   label: 'Supervisor Checklist', icon: 'icon-checkbox-checked'     },
   { id: 'unit-activity-view',     label: 'Unit Activity View',   icon: 'icon-portrait-card-view'   },
+  { id: 'workshop-page',          label: 'Workshop Page',        icon: 'icon-activities-tasks-list' },
+  { id: 'workshop-refresh',       label: 'Workshop Refresh',     icon: 'icon-activities-tasks-list' },
 ] as const
 
 function getProtoFromHash(): string | null {
@@ -45,6 +49,8 @@ export default function PrototypesApp() {
       case 'mobile-checklist-flow': return <MobileChecklistFlow />
       case 'supervisor-checklist':  return <SupervisorChecklistPage />
       case 'unit-activity-view':    return <UnitActivityView />
+      case 'workshop-page':         return <WorkshopPage />
+      case 'workshop-refresh':      return <WorkshopRefreshPage />
       default:                      return null
     }
   }
