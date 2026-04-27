@@ -250,40 +250,6 @@ export default function PrototypesApp() {
             })}
           </div>
 
-          {/* Divider */}
-          <div style={{ padding: '4px 8px', flexShrink: 0 }}>
-            <div style={{ height: 1, backgroundColor: '#e4e5e8' }} />
-          </div>
-
-          {/* Profile — exact from Figma */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingRight: 8, flexShrink: 0, position: 'relative' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, minWidth: 0, padding: 8, borderRadius: 6 }}>
-              {/* 24px circle avatar with photo */}
-              <div style={{ width: 24, height: 24, borderRadius: '50%', backgroundColor: '#f4f1fd', flexShrink: 0, position: 'relative', overflow: 'hidden' }}>
-                <img
-                  alt=""
-                  src={F_PROFILE_PHOTO}
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
-                />
-              </div>
-              <span style={{ fontSize: 14, fontWeight: 500, color: '#20374b', lineHeight: '16px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontFamily: 'Roboto Flex, sans-serif' }}>
-                Brad Carley
-              </span>
-            </div>
-            {/* Notification icon + dot */}
-            <div style={{ position: 'relative', flexShrink: 0, width: 20, height: 20 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, borderRadius: 5, cursor: 'pointer' }}>
-                <img alt="" src={F_NOTIF_DOT} style={{ position: 'absolute', top: -8, left: -8, width: 8, height: 8 }} />
-                <i className="icon-settings1" style={{ fontSize: 18, color: '#5a6d80' }} />
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom fade overlay — from Figma */}
-          <div style={{
-            position: 'absolute', left: 16, right: 16, bottom: 231, height: 50, pointerEvents: 'none',
-            background: 'linear-gradient(to top, white 32%, rgba(255,255,255,0) 68%)',
-          }} />
         </div>
 
         {/* ── Main content ─────────────────────────────────────────────────── */}
@@ -304,10 +270,10 @@ export default function PrototypesApp() {
                 {/* Text */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, textAlign: 'center', width: 224 }}>
                   <p style={{ margin: 0, fontSize: 15, fontWeight: 500, color: '#20374b', lineHeight: '20px', fontFamily: 'Roboto Flex, sans-serif', whiteSpace: 'pre-wrap' }}>
-                    {'Welcome to \nBrad\'s Prototyping Library'}
+                    {'Welcome to the aXcelerate\nDesign Prototyping Library'}
                   </p>
                   <p style={{ margin: 0, fontSize: 14, color: '#5a6d80', lineHeight: '18px', fontFamily: 'Roboto Flex, sans-serif' }}>
-                    Explore my designs as integrated, functioning web prototypes
+                    Explore our designs as integrated, functioning web prototypes
                   </p>
                 </div>
               </div>
