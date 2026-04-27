@@ -17,15 +17,26 @@ const F_NOTIF_DOT         = 'https://www.figma.com/api/mcp/asset/cbc1b5d8-1bf0-4
 const F_EMPTY_BG          = 'https://www.figma.com/api/mcp/asset/e9eb0159-4953-4f63-8f14-173f22a045a2'
 const F_EMPTY_ILLUS       = 'https://www.figma.com/api/mcp/asset/c7b66254-3e10-4b79-bd35-c32b78981169'
 
-const PROTOTYPE_ITEMS = [
-  { id: null,                     label: 'Dashboard',           icon: 'icon-home'                  },
-  { id: 'component-library',      label: 'Component Library',   icon: 'icon-rocket-launch-publish'  },
-  { id: 'mobile-checklist-flow',  label: 'WBL Checklist Flow',  icon: 'icon-activities-tasks-list' },
-  { id: 'supervisor-checklist',   label: 'Supervisor Checklist', icon: 'icon-checkbox-checked'     },
-  { id: 'unit-activity-view',     label: 'Unit Activity View',   icon: 'icon-portrait-card-view'   },
-  { id: 'workshop-page',          label: 'Workshop Page',        icon: 'icon-activities-tasks-list' },
-  { id: 'workshop-refresh',       label: 'Workshop Refresh',     icon: 'icon-activities-tasks-list' },
-] as const
+type NavItem  = { type: 'item';  id: string | null; label: string; icon: string }
+type NavGroup = { type: 'group'; label: string; icon: string; children: { id: string; label: string }[] }
+type NavEntry = NavItem | NavGroup
+
+const NAV_ENTRIES: NavEntry[] = [
+  { type: 'item',  id: null,                label: 'Dashboard',           icon: 'icon-home'                  },
+  { type: 'item',  id: 'component-library', label: 'Component Library',   icon: 'icon-rocket-launch-publish' },
+  {
+    type: 'group', label: 'Work-based Learning', icon: 'icon-activities-tasks-list',
+    children: [
+      { id: 'mobile-checklist-flow', label: 'Mobile Checklist Marking'           },
+      { id: 'supervisor-checklist',  label: 'Checklist Marking'                  },
+      { id: 'unit-activity-view',    label: 'Unit Criteria Activity Requirements' },
+    ],
+  },
+  { type: 'item',  id: 'workshop-page',     label: 'Workshop Page',       icon: 'icon-activities-tasks-list' },
+  { type: 'item',  id: 'workshop-refresh',  label: 'Workshop Refresh',    icon: 'icon-activities-tasks-list' },
+]
+
+const WBL_IDS = new Set(['mobile-checklist-flow', 'supervisor-checklist', 'unit-activity-view'])
 
 function getProtoFromHash(): string | null {
   const hash = window.location.hash.replace(/^#\/?/, '')
@@ -34,6 +45,17 @@ function getProtoFromHash(): string | null {
 
 export default function PrototypesApp() {
   const [activeProto, setActiveProto] = useState<string | null>(getProtoFromHash)
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
+    () => new Set(WBL_IDS.has(getProtoFromHash() ?? '') ? ['Work-based Learning'] : ['Work-based Learning'])
+  )
+
+  function toggleGroup(label: string) {
+    setExpandedGroups(prev => {
+      const next = new Set(prev)
+      next.has(label) ? next.delete(label) : next.add(label)
+      return next
+    })
+  }
 
   useEffect(() => {
     const newHash = activeProto ? `#${activeProto}` : '#'
@@ -114,26 +136,76 @@ export default function PrototypesApp() {
 
           {/* Nav items */}
           <div style={{ flex: 1, overflow: 'auto', minHeight: 0 }}>
-            {PROTOTYPE_ITEMS.map(({ id, label, icon }) => {
-              const active = activeProto === id
+            {NAV_ENTRIES.map((entry) => {
+              if (entry.type === 'item') {
+                const active = activeProto === entry.id
+                return (
+                  <button
+                    key={entry.id ?? 'dashboard'}
+                    onClick={() => setActiveProto(entry.id)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      padding: '7px 8px', width: '100%', borderRadius: 6,
+                      background: active ? '#f0ecfd' : 'none',
+                      border: 'none', cursor: 'pointer', textAlign: 'left',
+                      color: active ? '#5B3FD4' : '#5a6d80',
+                      fontFamily: 'Roboto Flex, sans-serif',
+                      fontSize: 14, fontWeight: active ? 500 : 400,
+                      lineHeight: '16px',
+                    }}
+                  >
+                    <i className={entry.icon} style={{ fontSize: 18, flexShrink: 0, color: 'inherit' }} />
+                    {entry.label}
+                  </button>
+                )
+              }
+
+              // Group
+              const expanded = expandedGroups.has(entry.label)
               return (
-                <button
-                  key={id ?? 'dashboard'}
-                  onClick={() => setActiveProto(id)}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 8,
-                    padding: '7px 8px', width: '100%', borderRadius: 6,
-                    background: active ? '#f0ecfd' : 'none',
-                    border: 'none', cursor: 'pointer', textAlign: 'left',
-                    color: active ? '#5B3FD4' : '#5a6d80',
-                    fontFamily: 'Roboto Flex, sans-serif',
-                    fontSize: 14, fontWeight: active ? 500 : 400,
-                    lineHeight: '16px',
-                  }}
-                >
-                  <i className={icon} style={{ fontSize: 18, flexShrink: 0, color: 'inherit' }} />
-                  {label}
-                </button>
+                <div key={entry.label}>
+                  <button
+                    onClick={() => toggleGroup(entry.label)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      padding: '7px 8px', width: '100%', borderRadius: 6,
+                      background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
+                      color: '#5a6d80', fontFamily: 'Roboto Flex, sans-serif',
+                      fontSize: 14, fontWeight: 400, lineHeight: '16px',
+                    }}
+                  >
+                    <i className={entry.icon} style={{ fontSize: 18, flexShrink: 0, color: 'inherit' }} />
+                    <span style={{ flex: 1 }}>{entry.label}</span>
+                    <svg
+                      width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                      style={{ flexShrink: 0, transition: 'transform 150ms', transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </button>
+                  {expanded && entry.children.map(({ id, label }) => {
+                    const active = activeProto === id
+                    return (
+                      <button
+                        key={id}
+                        onClick={() => setActiveProto(id)}
+                        style={{
+                          display: 'flex', alignItems: 'center',
+                          padding: '7px 8px 7px 34px', width: '100%', borderRadius: 6,
+                          background: active ? '#f0ecfd' : 'none',
+                          border: 'none', cursor: 'pointer', textAlign: 'left',
+                          color: active ? '#5B3FD4' : '#5a6d80',
+                          fontFamily: 'Roboto Flex, sans-serif',
+                          fontSize: 14, fontWeight: active ? 500 : 400,
+                          lineHeight: '16px',
+                        }}
+                      >
+                        {label}
+                      </button>
+                    )
+                  })}
+                </div>
               )
             })}
           </div>
