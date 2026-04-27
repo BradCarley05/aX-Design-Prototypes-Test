@@ -63,6 +63,7 @@ export default function PrototypesApp() {
     return groups
   })
   const [hoveredGroup, setHoveredGroup] = useState<string | null>(null)
+  const [hoveredNav, setHoveredNav] = useState<string | null>(null)
 
   function toggleGroup(label: string) {
     setExpandedGroups(prev => {
@@ -154,14 +155,18 @@ export default function PrototypesApp() {
             {NAV_ENTRIES.map((entry) => {
               if (entry.type === 'item') {
                 const active = activeProto === entry.id
+                const itemKey = entry.id ?? 'dashboard'
+                const hovered = hoveredNav === itemKey
                 return (
                   <button
-                    key={entry.id ?? 'dashboard'}
+                    key={itemKey}
                     onClick={() => setActiveProto(entry.id)}
+                    onMouseEnter={() => setHoveredNav(itemKey)}
+                    onMouseLeave={() => setHoveredNav(null)}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 8,
                       padding: '7px 8px', width: '100%', borderRadius: 6,
-                      background: active ? '#f0ecfd' : 'none',
+                      background: active ? '#f0ecfd' : hovered ? '#f4f5f7' : 'none',
                       border: 'none', cursor: 'pointer', textAlign: 'left',
                       color: active ? '#5B3FD4' : '#5a6d80',
                       fontFamily: 'Roboto Flex, sans-serif',
@@ -188,7 +193,8 @@ export default function PrototypesApp() {
                     style={{
                       display: 'flex', alignItems: 'center', gap: 8,
                       padding: '7px 8px', width: '100%', borderRadius: 6,
-                      background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
+                      background: hovered ? '#f4f5f7' : 'none',
+                      border: 'none', cursor: 'pointer', textAlign: 'left',
                       color: '#5a6d80', fontFamily: 'Roboto Flex, sans-serif',
                       fontSize: 14, fontWeight: 400, lineHeight: '16px',
                     }}
@@ -210,14 +216,17 @@ export default function PrototypesApp() {
                   </button>
                   {expanded && entry.children.map(({ id, label }) => {
                     const active = activeProto === id
+                    const childHovered = hoveredNav === id
                     return (
                       <button
                         key={id}
                         onClick={() => setActiveProto(id)}
+                        onMouseEnter={() => setHoveredNav(id)}
+                        onMouseLeave={() => setHoveredNav(null)}
                         style={{
                           display: 'flex', alignItems: 'center',
                           padding: '7px 8px 7px 34px', width: '100%', borderRadius: 6,
-                          background: active ? '#f0ecfd' : 'none',
+                          background: active ? '#f0ecfd' : childHovered ? '#f4f5f7' : 'none',
                           border: 'none', cursor: 'pointer', textAlign: 'left',
                           color: active ? '#5B3FD4' : '#5a6d80',
                           fontFamily: 'Roboto Flex, sans-serif',
