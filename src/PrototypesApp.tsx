@@ -33,7 +33,7 @@ const NAV_ENTRIES: NavEntry[] = [
     ],
   },
   {
-    type: 'group', label: 'Workshops', icon: 'icon-workshop',
+    type: 'group', label: 'Workshops', icon: 'icon-workshop-blackboard',
     children: [
       { id: 'workshop-page',    label: 'Workshop Page'    },
       { id: 'workshop-refresh', label: 'Workshop Refresh' },
@@ -58,10 +58,11 @@ export default function PrototypesApp() {
   const [activeProto, setActiveProto] = useState<string | null>(getProtoFromHash)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => {
     const initial = getProtoFromHash()
-    const groups = new Set<string>(['Work-based Learning', 'Workshops'])
+    const groups = new Set<string>()
     if (initial && GROUP_IDS[initial]) groups.add(GROUP_IDS[initial])
     return groups
   })
+  const [hoveredGroup, setHoveredGroup] = useState<string | null>(null)
 
   function toggleGroup(label: string) {
     setExpandedGroups(prev => {
@@ -176,10 +177,14 @@ export default function PrototypesApp() {
 
               // Group
               const expanded = expandedGroups.has(entry.label)
+              const hovered = hoveredGroup === entry.label
+              const showChevron = expanded || hovered
               return (
                 <div key={entry.label}>
                   <button
                     onClick={() => toggleGroup(entry.label)}
+                    onMouseEnter={() => setHoveredGroup(entry.label)}
+                    onMouseLeave={() => setHoveredGroup(null)}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 8,
                       padding: '7px 8px', width: '100%', borderRadius: 6,
@@ -193,7 +198,12 @@ export default function PrototypesApp() {
                     <svg
                       width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                      style={{ flexShrink: 0, transition: 'transform 150ms', transform: expanded ? 'rotate(0deg)' : 'rotate(180deg)' }}
+                      style={{
+                        flexShrink: 0,
+                        transition: 'transform 150ms, opacity 150ms',
+                        transform: expanded ? 'rotate(0deg)' : 'rotate(180deg)',
+                        opacity: showChevron ? 1 : 0,
+                      }}
                     >
                       <path d="m6 9 6 6 6-6" />
                     </svg>
