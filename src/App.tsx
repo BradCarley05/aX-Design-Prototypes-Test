@@ -310,18 +310,20 @@ export default function App({ standalone = true }: { standalone?: boolean }) {
         {/* Sidebar nav */}
         <aside style={{ flexShrink: 0 }} className="ax-sidebar">
           <div style={{ position: 'sticky', top: 80 }}>
-            <Tabs value={activeTab} onValueChange={(v) => {
-              const tab = v as 'components' | 'prototypes'
-              setActiveTab(tab)
-              setActiveNav(tab === 'components' ? 'buttons' : 'mobile-checklist-flow')
-            }}>
-              <TabsList style={{ width: '100%', marginBottom: 8 }}>
-                <TabsTrigger value="components" style={{ flex: 1 }}>Components</TabsTrigger>
-                <TabsTrigger value="prototypes" style={{ flex: 1 }}>Prototypes</TabsTrigger>
-              </TabsList>
-            </Tabs>
+            {standalone && (
+              <Tabs value={activeTab} onValueChange={(v) => {
+                const tab = v as 'components' | 'prototypes'
+                setActiveTab(tab)
+                setActiveNav(tab === 'components' ? 'buttons' : 'mobile-checklist-flow')
+              }}>
+                <TabsList style={{ width: '100%', marginBottom: 8 }}>
+                  <TabsTrigger value="components" style={{ flex: 1 }}>Components</TabsTrigger>
+                  <TabsTrigger value="prototypes" style={{ flex: 1 }}>Prototypes</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            )}
             <VerticalNavMenu style={{ width: 'auto' }}>
-              {(activeTab === 'components' ? COMPONENT_ITEMS : PROTOTYPE_ITEMS).map(([id, label, iconClass]) => (
+              {(standalone && activeTab === 'prototypes' ? PROTOTYPE_ITEMS : COMPONENT_ITEMS).map(([id, label, iconClass]) => (
                 <NavItem
                   key={id}
                   flat={false}
