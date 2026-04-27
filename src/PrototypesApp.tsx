@@ -12,8 +12,6 @@ const F_LOGO_BOTTOM_LEFT  = 'https://www.figma.com/api/mcp/asset/146f6863-0d33-4
 const F_LOGO_TICK_FOOT    = 'https://www.figma.com/api/mcp/asset/1d3e6d8d-4e72-469d-a4e0-51935e9ce47c'
 const F_LOGO_BOTTOM_RIGHT = 'https://www.figma.com/api/mcp/asset/54da2866-b4cb-4f6a-b2c0-2adea28a5f11'
 const F_LOGO_TICK_TAIL    = 'https://www.figma.com/api/mcp/asset/65dda176-8cb0-45c2-a5e9-b2469a103ea4'
-const F_PROFILE_PHOTO     = 'https://www.figma.com/api/mcp/asset/e3b33113-eaa4-4e68-bf1a-2d6902995a25'
-const F_NOTIF_DOT         = 'https://www.figma.com/api/mcp/asset/cbc1b5d8-1bf0-4c39-aa4d-a116d6d2c7ef'
 const F_EMPTY_BG          = 'https://www.figma.com/api/mcp/asset/e9eb0159-4953-4f63-8f14-173f22a045a2'
 const F_EMPTY_ILLUS       = 'https://www.figma.com/api/mcp/asset/c7b66254-3e10-4b79-bd35-c32b78981169'
 
