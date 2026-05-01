@@ -7,13 +7,8 @@ import { WorkshopRefreshPage } from './components/ui/workshop-refresh-page'
 import App from './App'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
-// Figma asset URLs — expire ~7 days after last design fetch
-const F_LOGO_BOTTOM_LEFT  = 'https://www.figma.com/api/mcp/asset/146f6863-0d33-4d3f-b016-e8b4d22c799e'
-const F_LOGO_TICK_FOOT    = 'https://www.figma.com/api/mcp/asset/1d3e6d8d-4e72-469d-a4e0-51935e9ce47c'
-const F_LOGO_BOTTOM_RIGHT = 'https://www.figma.com/api/mcp/asset/54da2866-b4cb-4f6a-b2c0-2adea28a5f11'
-const F_LOGO_TICK_TAIL    = 'https://www.figma.com/api/mcp/asset/65dda176-8cb0-45c2-a5e9-b2469a103ea4'
-const F_EMPTY_BG          = 'https://www.figma.com/api/mcp/asset/e9eb0159-4953-4f63-8f14-173f22a045a2'
-const F_EMPTY_ILLUS       = 'https://www.figma.com/api/mcp/asset/c7b66254-3e10-4b79-bd35-c32b78981169'
+import welcomeIllustration from './assets/welcome-illustration.svg'
+import axLogo from './assets/ax-logo.svg'
 
 type NavItem  = { type: 'item';  id: string | null; label: string; icon: string }
 type NavGroup = { type: 'group'; label: string; icon: string; children: { id: string; label: string }[] }
@@ -124,20 +119,7 @@ export default function PrototypesApp() {
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               padding: 2, flexShrink: 0, boxSizing: 'border-box',
             }}>
-              <div style={{ width: 20, height: 18.286, position: 'relative', flexShrink: 0 }}>
-                <div style={{ position: 'absolute', top: '66.85%', right: '69.7%', bottom: 0, left: 0 }}>
-                  <img alt="" style={{ display: 'block', width: '100%', height: '100%' }} src={F_LOGO_BOTTOM_LEFT} />
-                </div>
-                <div style={{ position: 'absolute', top: '33.2%', right: '55.34%', bottom: '29.47%', left: '9.3%' }}>
-                  <img alt="" style={{ display: 'block', width: '100%', height: '100%' }} src={F_LOGO_TICK_FOOT} />
-                </div>
-                <div style={{ position: 'absolute', top: '66.85%', right: '29.65%', bottom: 0, left: '40.05%' }}>
-                  <img alt="" style={{ display: 'block', width: '100%', height: '100%' }} src={F_LOGO_BOTTOM_RIGHT} />
-                </div>
-                <div style={{ position: 'absolute', top: 0, right: 0, bottom: '28.67%', left: '25.69%' }}>
-                  <img alt="" style={{ display: 'block', width: '100%', height: '100%' }} src={F_LOGO_TICK_TAIL} />
-                </div>
-              </div>
+              <img alt="aXcelerate" src={axLogo} style={{ width: 20, height: 19, display: 'block' }} />
             </div>
             <span style={{ fontSize: 14, fontWeight: 500, color: '#20374b', lineHeight: '20px', fontFamily: 'Roboto Flex, sans-serif' }}>
               aXcelerate
@@ -256,15 +238,7 @@ export default function PrototypesApp() {
             /* Empty state — exact from Figma */
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, padding: 24, width: 248 }}>
-                {/* 96×96 illustration */}
-                <div style={{ position: 'relative', width: 96, height: 96, flexShrink: 0 }}>
-                  <div style={{ position: 'absolute', top: '17.07%', right: '0.32%', bottom: '0.11%', left: '16.86%' }}>
-                    <img alt="" src={F_EMPTY_BG} style={{ display: 'block', width: '100%', height: '100%' }} />
-                  </div>
-                  <div style={{ position: 'absolute', top: '7.81%', right: '10.4%', bottom: '6.86%', left: '12.5%' }}>
-                    <img alt="" src={F_EMPTY_ILLUS} style={{ display: 'block', width: '100%', height: '100%' }} />
-                  </div>
-                </div>
+                <img alt="" src={welcomeIllustration} style={{ width: 96, height: 96, flexShrink: 0 }} />
                 {/* Text */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, textAlign: 'center', width: 224 }}>
                   <p style={{ margin: 0, fontSize: 15, fontWeight: 500, color: '#20374b', lineHeight: '20px', fontFamily: 'Roboto Flex, sans-serif', whiteSpace: 'pre-wrap' }}>
